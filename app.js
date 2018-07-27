@@ -1,11 +1,16 @@
+//*设置引用
 var createError = require('http-errors');
-var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+//using express
+var express = require('express');
 
+
+///获取route文件
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var defaultRouter = require('./routes/default');
 
 var app = express();
 
@@ -19,7 +24,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
+//设置router
+app.use('/', defaultRouter);
+app.use('/index', indexRouter);
 app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
