@@ -10,15 +10,12 @@ var ejs = require('ejs');
 var express = require('express');
 
 
-//获取route文件
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var defaultRouter = require('./routes/default');
+
 
 var app = express();
 
 // view engine setup
-//让html调用ejs引擎
+//让html调用ejs引擎（等于html可以写ejs）
 app.engine('html', ejs.__express);
 app.set('views', path.join(__dirname, 'views'));
 // app.set('view engine', 'html');
@@ -26,6 +23,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(logger('dev'));
 app.use(express.json());
  app.use(bodyParser.json());
+ app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
@@ -38,10 +36,15 @@ app.use(function(req, res, next) {
   next();
 });
 
-//设置router
-app.use('/', defaultRouter);
-app.use('/index', indexRouter);
-app.use('/users', usersRouter);
+//* 用routes/index.js分包路由
+var routes = require('./routes/index');
+routes(app);
+
+
+// //设置router
+// app.use('/', defaultRouter);
+// app.use('/index', indexRouter);
+// app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -58,6 +61,7 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error.ejs');
 });
+
 
 
 

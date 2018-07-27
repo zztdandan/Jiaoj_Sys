@@ -16,5 +16,25 @@
         $('#123').html('123');
 
     })
-  function a(){alert('1');}
+    function a() {
+        $.ajax({
+            type: "post",
+            url: '/user?id=23',
+            data: { "test": 1, "aa": "sdf", "bb": [1, 3, 4, 5, 444] },
+            dataType: "json",
+            success: function (data) {
+                if (data.Flag == true) {
+
+                    alert(data.Msg);
+
+                } else {
+                    alert(data.Msg);
+                }
+            },
+            error: function (data) {
+                alert("操作出现错误" + data + data.Msg);
+            }
+        });
+
+    }
 </script>
