@@ -4,9 +4,8 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>我的生活</title>
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
-    <link rel="shortcut icon" href="/favicon.ico">
+    <title>交警系统</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">   
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <script src="/js/jquery-1.8.0.min.js"></script>
@@ -26,7 +25,7 @@
 
     <div class="page-group">
         <!-- 首页 -->
-        <div class="page page-current">
+        <div class="page page-current" id="homerouter">
             <header class="bar bar-nav">
 
                 <h1 class="title">交警系统</h1>
@@ -48,32 +47,51 @@
             </nav>
             <div class="content">
                 <div class="content-block">
-                    <ul>
-                        <li>
-                            <a href="#router2">ajax加载新页面</a>
-                        </li>
-                    </ul>
+                
+                    <%if(warning!=null){%>
+                    <%warning.forEach(function(warnitem){%>
+                        <div class="alert alert-warning alert-dismissible" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                           <%=warnitem.warning%>
+                        </div>
+                    <%});%>
+                    <%}%>
+                    <!-- 业务按钮模块 -->
+                   <div class="row">
+                       
+                        <%if(menuList!=null){%>
+                            <%menuList.forEach(function(menuitem){%>
+                                <%var acturl=menuitem.menu_url+'?id='+menuitem.menu_id%>
+                                <div class="col-xs-6" style="padding:5px">
+                                    <a href="<%acturl%>" class="button button-big" style="font-size: 0.65rem">
+                                        <%=menuitem.menu_title%>
+                                    </a>
+                                </div>
+                            <%});%>
+                            <%}%>
+                   </div>
                 </div>
             </div>
         </div>
-    </div>
-    
-    <!-- 个人信息 -->
-    <div class="page" id='router2'>
-        <header class="bar bar-nav">
-            <a class="button button-link button-nav pull-left back" href="#router">
-                <span class="icon icon-left"></span>
-                返回
-            </a>
-            <h1 class='title'>路由</h1>
-        </header>
-        <div class="content">
-            <div class="content-block">
-                这是ajax 加载的新页面，点击左上角的
-                <a href="#" class='back'>返回</a> 按钮返回上一页。
+
+        <!-- 个人信息 -->
+        <div class="page" id='router2'>
+            <header class="bar bar-nav">
+                <a class="button button-link button-nav pull-left back" href="#homerouter">
+                    <span class="icon icon-left"></span>
+                    返回
+                </a>
+                <h1 class='title'>路由</h1>
+            </header>
+            <div class="content">
+                <div class="content-block">
+                    这是ajax 加载的新页面，点击左上角的
+                    <a href="#" class='back'>返回</a> 按钮返回上一页。
+                </div>
             </div>
         </div>
-    </div>
 </body>
 
 </html>
