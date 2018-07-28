@@ -4,8 +4,9 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var bodyParser=require('body-parser');
 var logger = require('morgan');
-//using ejs 引擎
 var ejs = require('ejs'); 
+var path = require('path');
+var mysql=require('mysql');
 //using express
 var express = require('express');
 
@@ -14,10 +15,8 @@ var express = require('express');
 
 var app = express();
 
-// view engine setup
-//让html调用ejs引擎（等于html可以写ejs）
-app.engine('html', ejs.__express);
-app.set('views', path.join(__dirname, 'views'));
+
+
 // app.set('view engine', 'html');
 
 app.use(logger('dev'));
@@ -36,10 +35,16 @@ app.use(function(req, res, next) {
   next();
 });
 
+  // view engine setup
+  //让html调用ejs引擎（等于html可以写ejs）
+  app.engine('html', ejs.__express);
+
+  app.set('views', path.join(__dirname, ''));
+
 //* 用routes/index.js分包路由
 var routes = require('./routes/index');
 routes(app);
-
+//链接sql
 
 // //设置router
 // app.use('/', defaultRouter);
@@ -54,12 +59,13 @@ app.use(function(req, res, next) {
 // error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+  // res.locals.message = err.message;
+  // res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error.ejs');
+  // // render the error page
+  err.status=err.status || 500;
+
+  res.render('views/error.ejs',{"errMsg":err.message,"stat":err.status});
 });
 
 
