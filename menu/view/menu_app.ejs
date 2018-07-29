@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>交警系统</title>
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1">   
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <script src="/js/jquery-1.8.0.min.js"></script>
@@ -47,31 +47,24 @@
             </nav>
             <div class="content">
                 <div class="content-block">
-                
-                    <%if(warning!=null){%>
-                    <%warning.forEach(function(warnitem){%>
-                        <div class="alert alert-warning alert-dismissible" role="alert">
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                           <%=warnitem.warning%>
-                        </div>
-                    <%});%>
-                    <%}%>
+                    <!-- 警示区域 -->
+                    <div class="row" id="warning_content">
+
+                    </div>
                     <!-- 业务按钮模块 -->
-                   <div class="row">
-                       
+                    <div class="row">
+
                         <%if(menuList!=null){%>
                             <%menuList.forEach(function(menuitem){%>
                                 <%var acturl=menuitem.menu_url+'?id='+menuitem.menu_id%>
-                                <div class="col-xs-6" style="padding:5px">
-                                    <a href="<%acturl%>" class="button button-big" style="font-size: 0.65rem">
-                                        <%=menuitem.menu_title%>
-                                    </a>
-                                </div>
-                            <%});%>
-                            <%}%>
-                   </div>
+                                    <div class="col-xs-6" style="padding:5px">
+                                        <a href="<%=acturl%>" class="button button-big" style="font-size: 0.65rem">
+                                            <%=menuitem.menu_title%>
+                                        </a>
+                                    </div>
+                                    <%});%>
+                                        <%}%>
+                    </div>
                 </div>
             </div>
         </div>
@@ -92,6 +85,39 @@
                 </div>
             </div>
         </div>
+
+        <div class="alert alert-warning alert-dismissible disabled" id="warning_sample" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+
+        </div>
+
 </body>
+<script>
+
+    $(function () {
+        ShowWarning();
+
+
+    });
+</script>
+<script>
+    //显示警告
+    function ShowWarning() {
+        $.ajax({
+            type: "get",
+            url: '/user_warning_info',
+            
+           
+            success: function (data) {
+                console.log("uw_success");
+            },
+            error: function (data) {
+                alert("操作出现错误" +data);
+            }
+        });
+    }
+</script>
 
 </html>

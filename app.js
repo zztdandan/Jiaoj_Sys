@@ -6,23 +6,16 @@ var bodyParser=require('body-parser');
 var logger = require('morgan');
 var ejs = require('ejs'); 
 var path = require('path');
-var mysql=require('mysql');
 //using express
 var express = require('express');
-
-
-
-
 var app = express();
 
 
 
-// app.set('view engine', 'html');
-
 app.use(logger('dev'));
 app.use(express.json());
- app.use(bodyParser.json());
- app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
@@ -35,14 +28,14 @@ app.use(function(req, res, next) {
   next();
 });
 
-  // view engine setup
+  //设定全局视图解析引擎
   //让html调用ejs引擎（等于html可以写ejs）
   app.engine('html', ejs.__express);
-
+  //设定views目录为全局，调用views将从根目录开始写路径
   app.set('views', path.join(__dirname, ''));
 
 //* 用routes/index.js分包路由
-var routes = require('./routes/index');
+var routes = require(path.join(__dirname, '/routes/index'));
 routes(app);
 //链接sql
 

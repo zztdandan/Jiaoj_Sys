@@ -1,4 +1,4 @@
-var easy_mysql = require("../mydb/easy_mysql");
+var easy_mysql = require(process.cwd()+"/mydb/easy_mysql");
 
 var em = new easy_mysql("user_warning");
 
