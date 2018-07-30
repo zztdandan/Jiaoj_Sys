@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>交警系统登陆</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <script src="/js/jquery-1.8.0.min.js"></script>
+
+    <!-- <link href="/css/bootstrap.min.css" type="text/css" rel="stylesheet" charset=“utf-8”> -->
+    <link href="/css/sm.min.css" type="text/css" rel="stylesheet" charset=“utf-8”>
+    <!-- <script src="/js/bootstrap.min.js"></script> -->
+    <script src="/js/zepto.min.js"></script>
+    <script src="/js/sm.min.js"></script>
+    <link href="/css/menu_css.css" type="text/css" rel="stylesheet" charset=“utf-8”>
+
+
+</head>
+
+<body>
+
+
+    <div class="page-group">
+        <!-- 首页 -->
+        <div class="page page-current" id="homerouter">
+
+
+            <header class="bar bar-nav">
+                <a class="button button-link button-nav pull-left back">
+                    <span class="icon icon-left"></span>
+                    返回
+                </a>
+                <h1 class="title">交警系统登陆</h1>
+            </header>
+            <div class="content">
+                <form action="/login" id='formLogin' method="POST">
+                    <p>登陆信息丢失，重新登陆</p>
+                    <div class="list-block">
+                        <ul>
+                            <!-- Text inputs -->
+                            <li>
+                                <div class="item-content">
+
+                                    <div class="item-inner">
+                                        <div class="item-title label" style="">电话</div>
+                                        <div class="item-input">
+                                            <input type="text" name='phone_num' placeholder="phone number">
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="item-content">
+
+                                    <div class="item-inner">
+                                        <div class="item-title label" style="color:black;font-size: 100%;">密码</div>
+                                        <div class="item-input">
+                                            <input type="password" name='pwd' placeholder="Password" class="">
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="content-block">
+                        <div class="row">
+                            <div class="col-50">
+                                <input type="reset" style="width:100%" class="button button-big button-fill button-danger" />
+                            </div>
+                            <div class="col-50">
+                                <input type="submit" class="button button-big button-fill button-success" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+
+        </div>
+
+
+</body>
+<script>
+    $(function () {
+        //绑定表单提交的返回方式
+        $("#formLogin").ajaxForm(function (data) {
+            alert("post success." + data);
+            //Alert("post success.");
+        });
+    })
+
+</script>
+
+</html>

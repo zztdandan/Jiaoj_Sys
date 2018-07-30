@@ -35,7 +35,7 @@ app.use(function(req, res, next) {
   app.set('views', path.join(__dirname, ''));
 
 //* 用routes/index.js分包路由
-var routes = require(path.join(__dirname, '/routes/index'));
+var routes = require(path.join(__dirname, 'routes','index'));
 routes(app);
 //链接sql
 

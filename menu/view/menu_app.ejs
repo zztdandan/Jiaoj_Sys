@@ -15,6 +15,7 @@
     <script src="/js/bootstrap.min.js"></script>
     <script src="/js/zepto.min.js"></script>
     <script src="/js/sm.min.js"></script>
+    <link href="/css/menu_css.css" type="text/css" rel="stylesheet" charset=“utf-8”>
 
 
 
@@ -48,17 +49,17 @@
             <div class="content">
                 <div class="content-block">
                     <!-- 警示区域 -->
-                    <div class="row" id="warning_content">
+                    <div id="warning_content">
 
                     </div>
                     <!-- 业务按钮模块 -->
-                    <div class="row">
+                    <div>
 
                         <%if(menuList!=null){%>
                             <%menuList.forEach(function(menuitem){%>
                                 <%var acturl=menuitem.menu_url+'?id='+menuitem.menu_id%>
                                     <div class="col-xs-6" style="padding:5px">
-                                        <a href="<%=acturl%>" class="button button-big" style="font-size: 0.65rem">
+                                        <a href="javascript:relocation('<%=acturl%>')" class="button button-big" style="font-size: 0.65rem">
                                             <%=menuitem.menu_title%>
                                         </a>
                                     </div>
@@ -69,7 +70,7 @@
             </div>
         </div>
 
-        <!-- 个人信息 -->
+        <!-- 个人信息
         <div class="page" id='router2'>
             <header class="bar bar-nav">
                 <a class="button button-link button-nav pull-left back" href="#homerouter">
@@ -84,7 +85,7 @@
                     <a href="#" class='back'>返回</a> 按钮返回上一页。
                 </div>
             </div>
-        </div>
+        </div> -->
 
         <div class="alert alert-warning alert-dismissible disabled" id="warning_sample" role="alert">
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -98,9 +99,11 @@
 
     $(function () {
         ShowWarning();
-
-
     });
+
+    function relocation(url) {
+        this.location = url;
+    }
 </script>
 <script>
     //显示警告
@@ -108,13 +111,13 @@
         $.ajax({
             type: "get",
             url: '/user_warning_info',
-            
-           
+
+
             success: function (data) {
                 console.log("uw_success");
             },
             error: function (data) {
-                alert("操作出现错误" +data);
+                alert("操作出现错误" + data);
             }
         });
     }
