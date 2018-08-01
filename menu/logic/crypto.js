@@ -45,6 +45,7 @@ fs = require('fs');
 function encrypteFunc(){
 
 }
+//加密
 encrypteFunc.cipher=function(algorithm, key, buf ,cb){
     var encrypted = "";
     var cip = crypto.createCipher(algorithm, key);
@@ -52,8 +53,9 @@ encrypteFunc.cipher=function(algorithm, key, buf ,cb){
     encrypted += cip.final('hex');
     cb(encrypted);
 };
-
-
+encrypteFunc.key='jiaojsys';
+encrypteFunc.algorithm='rc4';
+//解密
 encrypteFunc.decipher=function (algorithm, key, encrypted,cb){
     var decrypted = "";
     var decipher = crypto.createDecipher(algorithm, key);

@@ -20,11 +20,11 @@ router.get('*', function (req, res, next) {
     }
     //!注意，这里不用else，会重复渲染header而报错，一定保证res后面有任何其他函数!
     else {
-        crypto.decipher('rc4', 'jiaojsys', encrypted, function (decrypted) {
-            var user_info = JSON.parse(decrypted);
-            var that_time = int.parse(user_info.timestamp);
-            var this_time = +new Date();
-            if (that_time <= this_time) {
+        crypto.decipher(crypto.algorithm, crypto.key, req.cookies.token, function (decrypted) {
+            var user_info_json = JSON.parse(decrypted);
+            var that_time = user_info_json.time;
+            var this_time = new Date().getTime();
+            if (that_time >= this_time) {
                 next();
 
             }

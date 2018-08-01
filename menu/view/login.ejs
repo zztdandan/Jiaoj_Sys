@@ -9,23 +9,30 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <script src="/js/jquery-1.8.0.min.js"></script>
-
-    <!-- <link href="/css/bootstrap.min.css" type="text/css" rel="stylesheet" charset=“utf-8”> -->
+    <script src="/js/jquery.form.js"></script>
+    <!-- <script>$.noConflict();</script>
+    <link href="/css/bootstrap.min.css" type="text/css" rel="stylesheet" charset=“utf-8”>
+    <script src="/js/bootstrap.min.js"></script>
     <link href="/css/sm.min.css" type="text/css" rel="stylesheet" charset=“utf-8”>
-    <!-- <script src="/js/bootstrap.min.js"></script> -->
+  
     <script src="/js/zepto.min.js"></script>
     <script src="/js/sm.min.js"></script>
-    <link href="/css/menu_css.css" type="text/css" rel="stylesheet" charset=“utf-8”>
+    <link href="/css/menu_css.css" type="text/css" rel="stylesheet" charset=“utf-8”> -->
 
-
+    <link rel="stylesheet" href="/light7/dist/css/light7.min.css"type="text/css"  charset=“utf-8”>
+    <!-- <script type='text/javascript' src='js/jquery.min.js' charset='utf-8'></script> -->
+    <script type='text/javascript' src='/light7/dist/js/light7.min.js' charset='utf-8'></script>
+    <!--如果你用到了拓展包中的组件，还需要引用对应的JS文件-->
+    <!-- <link rel="stylesheet" href="css/light7-swiper.min.css">
+    <script type='text/javascript' src='js/light7-seiper.min.js' charset='utf-8'></script> -->
 </head>
 
 <body>
 
 
-    <div class="page-group">
-        <!-- 首页 -->
-        <div class="page page-current" id="homerouter">
+ 
+       
+        <div class="page">
 
 
             <header class="bar bar-nav">
@@ -36,6 +43,7 @@
                 <h1 class="title">交警系统登陆</h1>
             </header>
             <div class="content">
+                    
                 <form action="/login" id='formLogin' method="POST">
                     <p>登陆信息丢失，重新登陆</p>
                     <div class="list-block">
@@ -45,7 +53,7 @@
                                 <div class="item-content">
 
                                     <div class="item-inner">
-                                        <div class="item-title label" style="">电话</div>
+                                        <div class="item-title label" style="color:black;font-size: 100%;">电话</div>
                                         <div class="item-input">
                                             <input type="text" name='phone_num' placeholder="phone number">
                                         </div>
@@ -75,23 +83,43 @@
                             </div>
                         </div>
                     </div>
+                    
                 </form>
             </div>
 
-
+           
         </div>
 
 
 </body>
 <script>
+    
     $(function () {
-        //绑定表单提交的返回方式
-        $("#formLogin").ajaxForm(function (data) {
-            alert("post success." + data);
-            //Alert("post success.");
-        });
+        
+       
     })
+    //绑定表单提交的返回方式
+    jQuery("#formLogin").ajaxForm(function (data) {
+            if (typeof (data.bol) == "undefined") {
+                alert("出现严重错误");
+            }
+            if (data.bol) {
+                $.alert("aaa");
+                
+                setTimeout(function () {
+                  
+                    history.back();
+                }, 500);
+               
 
+            }
+            else{
+               
+               
+            }
+        });
 </script>
-
+<script>
+    $.init();
+</script>
 </html>

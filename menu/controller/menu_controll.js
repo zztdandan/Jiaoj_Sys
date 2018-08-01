@@ -14,7 +14,7 @@ router.get('/', new user_menu().read_user_menu);
 router.get('/', function (req, res, next) {
    
     var menuList = req.read_user_menu;
-    console.log("1");
+    console.log("首页controller");
     res.render('menu/view/menu_app.ejs', { "menuList": menuList});
 });
 //首页end
@@ -30,7 +30,7 @@ router.get('/user_warning_info', uvnew.read_user_warning);
 // router.use('/user_warning_info', uvnew.del_user_warning);
 router.get('/user_warning_info', function (req, res, next) {
     var warningInfo = null;
-    if (req.read_user_warning.length != 0) {
+    if (req.read_user_warning!=null) {
         warningInfo = req.read_user_warning;
     }
     res.json(warningInfo);

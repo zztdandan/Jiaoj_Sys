@@ -11,12 +11,16 @@
     <script src="/js/jquery-1.8.0.min.js"></script>
 
     <link href="/css/bootstrap.min.css" type="text/css" rel="stylesheet" charset=“utf-8”>
-    <link href="/css/sm.min.css" type="text/css" rel="stylesheet" charset=“utf-8”>
     <script src="/js/bootstrap.min.js"></script>
+
+    <!-- <link href="/css/sm.min.css" type="text/css" rel="stylesheet" charset=“utf-8”>
+   
     <script src="/js/zepto.min.js"></script>
     <script src="/js/sm.min.js"></script>
-    <link href="/css/menu_css.css" type="text/css" rel="stylesheet" charset=“utf-8”>
+    <link href="/css/menu_css.css" type="text/css" rel="stylesheet" charset=“utf-8”> -->
 
+    <link rel="stylesheet" href="/light7/dist/css/light7.min.css" type="text/css" charset=“utf-8”>
+    <script type='text/javascript' src='/light7/dist/js/light7.min.js' charset='utf-8'></script>
 
 
 </head>
@@ -24,40 +28,21 @@
 <body>
 
 
-    <div class="page-group">
-        <!-- 首页 -->
-        <div class="page page-current" id="homerouter">
-            <header class="bar bar-nav">
 
-                <h1 class="title">交警系统</h1>
-            </header>
-            <nav class="bar bar-tab">
-                <a class="tab-item active" href="#">
-                    <span class="icon icon-home"></span>
-                    <span class="tab-label">首页</span>
-                </a>
-
-                <a class="tab-item" href="#">
-                    <span class="icon icon-card"></span>
-                    <span class="tab-label">我的申请</span>
-                </a>
-                <a class="tab-item" href="#">
-                    <span class="icon icon-me"></span>
-                    <span class="tab-label">个人信息</span>
-                </a>
-            </nav>
+    <!-- 首页 -->
+    <div class="page">
+        <!-- 页头页脚 -->
+        <%- include(process.cwd()+'/views/headfoot.ejs') %>
             <div class="content">
                 <div class="content-block">
                     <!-- 警示区域 -->
-                    <div id="warning_content">
 
-                    </div>
                     <!-- 业务按钮模块 -->
                     <div>
 
                         <%if(menuList!=null){%>
                             <%menuList.forEach(function(menuitem){%>
-                                <%var acturl=menuitem.menu_url+'?id='+menuitem.menu_id%>
+                                <%var acturl=menuitem.menu_url+'?'+menuitem.menu_id%>
                                     <div class="col-xs-6" style="padding:5px">
                                         <a href="javascript:relocation('<%=acturl%>')" class="button button-big" style="font-size: 0.65rem">
                                             <%=menuitem.menu_title%>
@@ -68,36 +53,15 @@
                     </div>
                 </div>
             </div>
-        </div>
+    </div>
 
-        <!-- 个人信息
-        <div class="page" id='router2'>
-            <header class="bar bar-nav">
-                <a class="button button-link button-nav pull-left back" href="#homerouter">
-                    <span class="icon icon-left"></span>
-                    返回
-                </a>
-                <h1 class='title'>路由</h1>
-            </header>
-            <div class="content">
-                <div class="content-block">
-                    这是ajax 加载的新页面，点击左上角的
-                    <a href="#" class='back'>返回</a> 按钮返回上一页。
-                </div>
-            </div>
-        </div> -->
 
-        <div class="alert alert-warning alert-dismissible disabled" id="warning_sample" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-
-        </div>
 
 </body>
 <script>
 
-    $(function () {
+    jQuery(function () {
+
         ShowWarning();
     });
 
@@ -114,7 +78,15 @@
 
 
             success: function (data) {
-                console.log("uw_success");
+                if (data != null) {
+                    data.forEach(function (a) {
+                        console.log(a);
+                    });
+
+                }
+
+
+
             },
             error: function (data) {
                 alert("操作出现错误" + data);
