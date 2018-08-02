@@ -5,9 +5,9 @@ var path = require('path');
 var user_info_model = require('./user_info_model');
 var read_user_warning = function (req, res, next) {
     if (typeof (req.cookies.token) != "undefined") {
-
-        new user_info_model().get_user_by_token(req.cookies.token, function (foreign_user) {
-            var userid = foreign_user.REC_ID;
+        var b = new Object();
+     var c= user_info_model.get_user_by_token(req.cookies.token, function (foreign_user) {
+            var userid = foreign_user.userid;
             var strQuery = "select * from user_warning where user_id='" + userid + "'";
             em.query(strQuery, function (err, rows) {
 
@@ -21,11 +21,12 @@ var read_user_warning = function (req, res, next) {
                 else {
                     req.read_user_warning = null;
                 }
-                next();
+                b.a= rows;
             });
 
         });
-
+       
+        next();
     }
     else {
         req.read_user_warning = null;

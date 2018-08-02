@@ -12,13 +12,14 @@ module.exports = function (app) {
   var user_view = require(path.join(process.cwd(),'user_view','user_route'));
   var admin_view = require(path.join(process.cwd(),'admin_view','admin_route'));
   var menu = require(path.join(process.cwd(),'menu','menu_route'));
-
+var file_manager_controller=require(path.join(process.cwd(),'controller','file_manager_controller'));
 
 
   //*管理员area
   app.use('/admin_view', admin_view);
   //*用户area
   app.use('/user_view', user_view);
+  app.use('/file_manager',file_manager_controller);
   //*默认路径归于menu_area
   app.use('/', menu);
 };

@@ -38,24 +38,12 @@
                     <!-- 警示区域 -->
 
                     <!-- 业务按钮模块 -->
-                    <div>
+                    <div id="menu_content">
 
-                        <%if(menuList!=null){%>
-                            <%menuList.forEach(function(menuitem){%>
-                                <%var acturl=menuitem.menu_url+'?'+menuitem.menu_id%>
-                                    <div class="col-xs-6" style="padding:5px">
-                                        <a href="javascript:relocation('<%=acturl%>')" class="button button-big" style="font-size: 0.65rem">
-                                            <%=menuitem.menu_title%>
-                                        </a>
-                                    </div>
-                                    <%});%>
-                                        <%}%>
                     </div>
                 </div>
             </div>
     </div>
-
-
 
 </body>
 <script>
@@ -63,6 +51,7 @@
     jQuery(function () {
 
         ShowWarning();
+        ReadUserMenu();
     });
 
     function relocation(url) {
@@ -83,6 +72,31 @@
                         console.log(a);
                     });
 
+                }
+
+
+
+            },
+            error: function (data) {
+                alert("操作出现错误" + data);
+            }
+        });
+    }
+    function ReadUserMenu() {
+        $.ajax({
+            type: "get",
+            url: '/user_menu',
+
+
+            success: function (data) {
+                if (data != null) {
+                    data.forEach(function (index_alone) {
+                        var a = '<div class="col-xs-6" style="padding:5px">' +
+                            ' <a class="button button-big external" style="font-size: 0.65rem">' +
+                            ' </a>' +
+                            ' </div>';
+                        $(a).appendTo("#menu_content").find('.external').text(index_alone.menu_title).attr("href", index_alone.menu_url + "?" + index_alone.menu_id);
+                    });
                 }
 
 

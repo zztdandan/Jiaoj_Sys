@@ -16,7 +16,7 @@ router.get('/', function (req, res, next) {
 
 router.post('/', function (req, res, next) {
 
-    new user_info_model().check_and_login_user(req.body.phone_num, req.body.pwd, function (bol, token) {
+    user_info_model.check_and_login_user(req.body.phone_num, req.body.pwd, function (bol, token) {
         if (bol) {
             res.cookie("token", token, { maxAge: 59 * 60 * 24 * 1000 });
             res.json({ "bol": true });

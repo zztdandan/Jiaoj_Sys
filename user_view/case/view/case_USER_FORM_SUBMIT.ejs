@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>交警系统</title>
+    <title>交警系统_用户表单提交流程</title>
     <meta name="viewport" content="initial-scale=1, maximum-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -26,16 +26,42 @@
     <div class="page-group">
         <!-- 首页 -->
         <div class="page page-current" id="homerouter">
-           
+
             <div class="content">
-              sfsd
+
             </div>
         </div>
 
 
 </body>
-<script>
 
+<script src="/custom_js/getRequest.js"></script>
+<script src="/custom_js/listfactory.js"></script>
+
+<script>
+var case_info=new Object();
+    //初始化，读取case_node信息，读取
+    $(function () {
+        var Request = new Object();
+        Request = GetRequest();
+        //通过类获取该url的id
+        var case_id = Request["id"];
+        $.ajax({
+            type: "get",
+            url: '/user_view/case/getUserSubForm',
+            data: { "case_id": case_id },
+            dataType: "json",
+            success: function (data) {
+                case_info=data;
+
+            },
+            error: function (data) {
+                alert("操作出现错误" + data);
+                console.log(data);
+            }
+        });
+
+    });
 </script>
 <script>
 
