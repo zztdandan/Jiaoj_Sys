@@ -45,12 +45,7 @@ user_info_model.check_and_login_user = function (phone, pwd, next) {
             next(bol);
         }
         else {
-            var curDate = new Date();
-            var startDate = new Date(curDate.setDate(curDate.getDate() + 1));
-            var a_token = JSON.stringify({ "phone": row.FORIEGN_PHONENUM, "time": startDate.getTime(),"userid":row.REC_ID });
-            crypto.cipher(crypto.algorithm, crypto.key, a_token, function (res) {
-                next(true, res);
-            })
+            crypto_token(row, crypto, next);
         }
 
 
@@ -80,3 +75,13 @@ user_info_model.get_user_by_token = function (token, next) {
 
 
 module.exports = user_info_model;
+
+//token加密
+function crypto_token(row, crypto, next) {
+    var curDate = new Date();
+    var startDate = new Date(curDate.setDate(curDate.getDate() + 1));
+    var a_token = JSON.stringify({ "phone": row.FORIEGN_PHONENUM, "time": startDate.getTime(), "userid": row.REC_ID });
+    crypto.cipher(crypto.algorithm, crypto.key, a_token, function (res) {
+        next(true, res);
+    });
+}

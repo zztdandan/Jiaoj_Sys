@@ -19,6 +19,7 @@ var file_manager_controller=require(path.join(process.cwd(),'controller','file_m
   app.use('/admin_view', admin_view);
   //*用户area
   app.use('/user_view', user_view);
+  //* 文件管理系统
   app.use('/file_manager',file_manager_controller);
   //*默认路径归于menu_area
   app.use('/', menu);

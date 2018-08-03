@@ -6,6 +6,7 @@ var router = express.Router();
 
 var crypto = require(path.join(process.cwd(), 'menu', 'logic', 'crypto'));
 
+
 router.get('*', function (req, res, next) {
     var path = require('path');
     var crypto = require(path.join(process.cwd(), 'menu', 'logic', 'crypto'));
@@ -23,18 +24,7 @@ router.get('*', function (req, res, next) {
     //有token值
     //!注意，这里不用else，会重复渲染header而报错，一定保证res后面有任何其他函数!
     else {
-        crypto.decipher(crypto.algorithm, crypto.key, req.cookies.token, function (decrypted) {
-            var user_info_json = JSON.parse(decrypted);
-            var that_time = user_info_json.time;
-            var this_time = new Date().getTime();
-            if (that_time >= this_time) {
-                next();
-
-            }
-            else {
-                res.redirect('/login');
-            }
-        });
+        token_decrypto(crypto, req, next, res);
     }
 
 
@@ -43,3 +33,19 @@ router.get('*', function (req, res, next) {
 
 
 module.exports = router;
+
+//token解密
+function token_decrypto(crypto, req, next, res) {
+    crypto.decipher(crypto.algorithm, crypto.key, req.cookies.token, function (decrypted) {
+        var user_info_json = JSON.parse(decrypted);
+        var that_time = user_info_json.time;
+        var this_time = new Date().getTime();
+        if (that_time >= this_time) {
+            next();
+        }
+        else {
+            res.redirect('/login');
+        }
+    });
+}
+

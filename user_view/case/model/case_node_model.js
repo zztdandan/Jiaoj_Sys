@@ -4,7 +4,7 @@ var crypto = require(path.join(process.cwd(), 'menu', 'logic', 'crypto'));
 var case_node_model = function () { }
 case_node_model.read_node_by_id = function (id, next) {
     var em = new easy_mysql("case_node");
-    em.where("id=" + id).find(function (data) {
+    em.where("rec_id=" + id).find(function (data) {
         next(data);
     });
 }
@@ -12,7 +12,7 @@ case_node_model.read_node_by_id = function (id, next) {
 case_node_model.read_next_node_by_this_progress = function (case_progress_json, next) {
     var em = new easy_mysql("case_node");
     var this_node_id = case_progress_json.node_id;
-    em.where("id=" + this_node_id).find(function (data) {
+    em.where("rec_id=" + this_node_id).find(function (data) {
         if (data.node_next.indexOf(',') >= 0) {//下一个节点不是单节点
             var condition = case_progress_json.content.condition;
             var em1 = new easy_mysql("case_map");
