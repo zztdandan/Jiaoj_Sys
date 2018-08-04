@@ -5,9 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>交警系统_用户表单提交流程</title>
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta charset="UTF-8">
 
     <script src="/js/jquery-1.8.0.min.js"></script>
     <script src="/js/jquery.form.js"></script>
@@ -15,8 +13,8 @@
     <script src="/js/bootstrap.min.js"></script> -->
 
 
-    <link rel="stylesheet" href="/light7/dist/css/light7.min.css" type="text/css" charset=“utf-8”>
-    <script type='text/javascript' src='/light7/dist/js/light7.min.js' charset='utf-8'></script>
+    <link rel="stylesheet" href="/light7/dist/css/light7.min.css" type="text/css" >
+    <script type='text/javascript' src='/light7/dist/js/light7.min.js'></script>
     <script src="/js/ajaxfileupload.js"></script>
 
 
@@ -43,12 +41,12 @@
                                 <div class="item-inner">
                                     <div class="item-title label">图片上传</div>
                                     <div class="item-input">
-                                        <form  enctype=“multipart/form-data”  action="/file_manager/upload" method="POST">
+                                        <form enctype='multipart/form-data' action="/file_manager/upload" method="POST">
                                             <!-- <form  action="/file_manager/upload" method="POST" > -->
                                             <p>
                                                 <input type="file" id="a111" name="image" accept=“image/*” />
                                             </p>
-                                            <input type="submit" name="suform" id="suform" value="上传"/>
+                                            <input type="submit" name="suform" id="suform" value="上传" />
 
                                         </form>
                                     </div>
