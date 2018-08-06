@@ -41,7 +41,7 @@
                                 <div class="item-inner">
                                     <div class="item-title label">图片上传</div>
                                     <div class="item-input">
-                                        <form enctype='multipart/form-data' action="/file_manager/upload" method="POST">
+                                        <form enctype='multipart/form-data' action="/file_manager/uploadpic" method="POST">
                                             <!-- <form  action="/file_manager/upload" method="POST" > -->
                                             <p>
                                                 <input type="file" id="a111" name="image" accept=“image/*” />
@@ -71,9 +71,7 @@
     var case_info = new Object();
     //初始化，读取case_node信息，读取
     $(function () {
-        // jQuery("#formLogin").ajaxForm(function (data) {
-        //    console.log(data);
-        // });
+       
         var Request = new Object();
         Request = GetRequest();
         //通过类获取该url的id
