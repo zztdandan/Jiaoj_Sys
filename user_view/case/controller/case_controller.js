@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var path = require('path');
+var fromdata = require('formidable');
 var case_node_model = require(path.join(process.cwd(), 'user_view', 'case', 'model', 'case_node_model'))
 router.get('/', function (req, res, next) {
   console.log('case_controller');
@@ -40,13 +41,22 @@ router.get('/', function (req, res, next) {
 
 
 router.get('/getUserSubForm', function (req, res, next) {
-  var case_id = req.query.case_id;
-  case_node_model.read_node_by_id(case_id, function (node) {
+  var case_node_id = req.query.case_node_id;
+  case_node_model.read_node_by_id(case_node_id, function (node) {
     var res_json = JSON.parse(node.node_detail);
     res.json(res_json);
   });
 
 
 });
-
+router.post('/user_form_submit',function(req,res,next){
+  var form = new fromdata.IncomingForm();
+  form.uploadDir = './tmp';
+  form.keepExtensions = true;
+  //转化为formidable后的处理办法
+  form.parse(req, function (err, fields, file) {
+    console.log(req.body);
+  });
+ 
+})
 module.exports = router;

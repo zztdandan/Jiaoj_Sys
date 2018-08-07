@@ -26,6 +26,19 @@ var NumberInput = Vue.extend({
         }
     }
 });
+//隐藏按钮用于传输某些数据
+var VisiInput = Vue.extend({
+    props: ["params"],
+    template:
+        '<input :name=" input_name" :id="input_id" type="text" v-model="input_value" style="display:none" />',
+    data: function () {
+        return {
+            input_value: "",
+            input_name: this.params.id,
+            input_id: "id_" + this.params.id
+        }
+    }
+});
 //上传按钮
 var SubmitInput = Vue.extend({
     props: ["params"],
@@ -41,8 +54,8 @@ var SubmitInput = Vue.extend({
 var PictureModalInput = Vue.extend({
     props: ["params"],
     template: "<div>" +
-        '<input type="button" :value="button_value" class="button button-action button-rounded" style="margin:8px;display:inline-block" @click="showmodal"/>' +
-        '<input type="text" v-model="url_value" :name="input_name" :id="input_id" style="display:none"/>' +
+        '<input type="button" :value="button_value" class="button button-action button-rounded" style="margin:8px;display:inline-block" @click="showmodal(this)"/>' +
+        '<input type="text" v-model="url_value" :name="input_name" :id="input_id" style="display:none" />' +
         '<p style="margin:8px;display:inline-block">{{suc_flag}}</p>' +
         ' </div>',
     data: function () {
@@ -56,7 +69,48 @@ var PictureModalInput = Vue.extend({
     },
     methods: {
         showmodal: function () {
+var that=this;
+            var newmodal = $.modal({
+                title: this.params.label,
+                text: "请提交如下图所示样板的图片",
+                afterText:
+                    '<form class="upload_pic" enctype="multipart/form-data">' +
+                    '<img style="width:100%" src="' +
+                    this.params["data-example-url"] +
+                    '"/>' +
+                    '<input type="file" class="button button-action button-rounded" style="width:50%" name="image"/>' +
+                    '</form>',
+                buttons: [
+                    {
+                        text: '返回提交'
+                    },
+                    {
+                        text: '提交图片',
+                        bold: true,
+                        onClick: function () {
+                            var formdata = new FormData($('.upload_pic')[0]);
 
+
+                            $.ajax({
+                                type: "post",
+                                url: '/file_manager/uploadpic',
+                                data: formdata,
+                                contentType: false,
+                                processData: false,
+                                dataType: "json",
+                                success: function (data) {
+                                    if (typeof (data.path) != 'undefined') {//上传成功
+                                        that.suc_flag="成功";
+                                        that.url_value=data.path;
+                                    }
+                                }
+                            });
+                        }
+                    },
+                ]
+            });
+            $(newmodal).first('.modal.modal-in').css('margin-top', '10px');
+            $(newmodal).first('.modal.modal-in').css('top', '0px');
         }
     }
 
@@ -75,7 +129,8 @@ var InputContainer = Vue.extend({
         'text-input': TextInput,
         'number-input': NumberInput,
         'submit-input': SubmitInput,
-        'picture-modal-input': PictureModalInput
+        'picture-modal-input': PictureModalInput,
+        'visi-input': VisiInput
     },
     data: function () {
 
@@ -90,22 +145,23 @@ var InputContainer = Vue.extend({
 //通用表单结构，将在.item-title.label里面填入表单内容，以及在
 var CommonList = Vue.component('common-list', {
     props: ["params"],
-    template: '<li>' +
+    template: '<li v-if="visi">' +
         '<div class="item-content">' +
 
         "<input-container :params=\"cildparams\"></input-container>" +
 
 
         '</div>' +
-        '</li>',
+        '</li>' +
+        '<li v-else style="display:none"> <input-container :params=\"cildparams\"></input-container></li>',
     components: {
         "input-container": InputContainer
     },
     data: function () {
         return {
+            visi: (this.params.type != "visi"),
             cildparams: this.params
         }
-
     }
 
 });

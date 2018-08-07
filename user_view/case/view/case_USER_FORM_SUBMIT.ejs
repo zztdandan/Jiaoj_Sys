@@ -2,10 +2,11 @@
 <html>
 
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>交警系统_用户表单提交流程</title>
-    <meta charset="UTF-8">
+    <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
 
     <script src="/js/jquery-1.8.0.min.js"></script>
     <script src="/js/jquery.form.js"></script>
@@ -17,7 +18,7 @@
     <link rel="stylesheet" href="/css/buttons.css" type="text/css">
     <script type='text/javascript' src='/light7/dist/js/light7.min.js'></script>
     <script src="/js/ajaxfileupload.js"></script>
-
+    
     <style>
         input[type=button].button {
             width: auto;
@@ -30,32 +31,18 @@
 
 
     <div class="page-group">
+       
+        
         <!-- 首页 -->
         <div class="page page-current" id="homerouter">
-
+                <div id="headerfooter">
+                        <simple-header ti="表单提交"></simple-header>
+                        <simple-footer ></simple-footer>
+                </div>
             <div class="content">
                 <form id="USER_FORM_SUBMI" action="/user_view/case/user_form_submit" method="POST" enctype="multipart/form-data">
                     <div class="list-block">
-                        <div class="modal modal-no-buttons" id="test">
-                            <div class="modal-inner">
 
-                                <div class="modal-title">dfgdfg</div>
-
-
-                                <div class="modal-text">dgfdg</div>
-
-
-
-
-                            </div>
-
-                            <div class="modal-buttons">
-
-                                <span class="modal-button modal-button-bold">asdsad</span>
-
-                            </div>
-
-                        </div>
 
                         <ul id='sub_form_list'>
                             <common-list v-bind:params="item" v-for="item in items"></common-list>
@@ -79,21 +66,50 @@
         var Request = new Object();
 
         Request = GetRequest();
-        //通过类获取该url的id
-        var case_id = Request["id"];
+        //通过类获取该url的node_id
+        var case_node_id = Request["id"];
         //初始化，读取case_node信息
         $.ajax({
             type: "get",
             url: '/user_view/case/getUserSubForm',
-            data: { "case_id": case_id },
+            data: { "case_node_id": case_node_id },
             dataType: "json",
             success: function (data) {
                 case_info = data;
                 data.UserSubForm.forEach(function (form_item) {
                     k.items.push(form_item);
                 });
-                //添加一个提交按钮
-                k.items.push({ type: "submit", label: "提交", value: "提交申请" });
+                //新增申请特殊处理,仅适用于没创建caseprogress情况
+                if (data.node_cate == "start") {
+                    //添加一个隐藏输入，存储新增表单的case_id
+                    k.items.push({ type: "visi", id: "case_id", value: data.case_id });
+                    //添加一个提交按钮
+                    k.items.push({ type: "submit", label: "提交", value: "提交申请" });
+                    var newmodal = $.modal({
+                        title: data.notification_title,
+                        afterText: data.notification,
+                        buttons: [
+                            {
+                                text: '取消申请',
+
+                                onClick: function () {
+                                    history.back();
+                                }
+                            },
+                            {
+                                text: '阅读完毕',
+                                bold: true,
+                                onClick: function () {
+
+                                }
+                            },
+                        ]
+                    });
+                }
+                else {
+                    //添加一个提交按钮
+                    k.items.push({ type: "submit", label: "提交", value: "提交填写" });
+                }
             },
             error: function (data) {
                 alert("操作出现错误" + data);
@@ -103,7 +119,7 @@
     });
 
     //表单提交的回调绑定
-    jQuery("#formLogin").ajaxForm(function (data) {
+    jQuery("#USER_FORM_SUBMI").ajaxForm(function (data) {
         if (typeof (data.code) == "undefined") {
             $.alert("出现严重错误");
         }
@@ -118,6 +134,16 @@
 
 </script>
 <!-- vue代码 -->
+<!-- 标题页脚 -->
+<script src="/component/simple_header.js"></script>
+<script>
+    new Vue({
+        el:'#headerfooter',
+        components: {
+            'simple-header': header
+        },      
+    })
+</script>
 <!-- 引入自己编写的有关组件库 -->
 <script src="/component/list_component.js"></script>
 <script>
@@ -138,15 +164,7 @@
         },
         data: function () {
             return {
-                "chdval": {
-                    "type": "text",
-                    "label": "身份证",
-                    "id": "identity",
-                    "data-type": "string",
-                    "data-length": "13,13",
-                    "data-char-limit": "[0-9]"
-                }
-                ,
+                
                 "items": []
             }
         },

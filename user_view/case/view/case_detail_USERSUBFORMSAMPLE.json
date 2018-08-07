@@ -1,5 +1,8 @@
 {
     "node_cate": "start",
+    "case_id":"1",
+    "notification_title":"申请须知",
+    "notification":"<div style='overflow:auto;' hei><p>段落1段落1段落1段落1段落1段落1段落1段落1段落1段落1段落1段落1段落1段落1段落1段落1段落1段落1段落1段落1段落1段落1段落1段落1段落1段落1段落1段落1段落1段落1段落1段落1段落1段落1</p><p>段落2段落2段落2段落2段落2段落2段落2段落2段落2段落2段落2段落2段落2段落2段落2段落2段落2段落2段落2段落2段落2段落2段落2段落2</p><p>段落3</p><p>段落4</p></div>" ,   
     "UserSubForm": [
         {
             "type": "text",
@@ -28,7 +31,7 @@
             "label": "身份证(反面)",
             "id": "identity_img_back",
             "data-type": "image",
-            "data-example-url": "/file_manager/load?id=jsrsfzzm"
+            "data-example-url": "/file_manager/load?id=jsrsfzfm"
         },
         {
             "type": "picture-modal",

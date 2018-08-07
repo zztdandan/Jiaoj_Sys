@@ -67,8 +67,8 @@ router.post('/uploadpic', function (req, res, next) {
             file_manager.FILE_TYPE = 'ftp';
             file_manager.FTP_CONFIG = JSON.stringify(require('./ftp_config'));
             file_manager.FTP_PATH
-            if (typeof (fields.type) != "undefined") {
-                fileSavepath = fileSavepath + '/' + fields.type;
+            if (typeof (fields.pic_type) != "undefined") {
+                fileSavepath = fileSavepath + '/' + fields.pic_type;
             }
             fileSavepath = fileSavepath + '/' + moment().format('YYYYMMDD');
             file_manager.FTP_PATH = fileSavepath + '/' + filename;
