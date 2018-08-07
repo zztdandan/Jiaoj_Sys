@@ -14,6 +14,18 @@ file_manager_model.additem = function (file_manager_entity, next) {
     })
 }
 
+file_manager_model.read_item = function (item_rec_id, next) {
+    var em = new easy_mysql("file_manager");
+    try{
+        em.where("REC_ID= '"+item_rec_id+"'").find(function(data){
+
+            next(data);
+        });
+    }
+    catch(cb){
+        throw new Error("该id没有对应文件");
+    }
+}
 
 
 

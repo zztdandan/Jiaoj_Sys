@@ -30,7 +30,8 @@ router.post('/uploadpic', function (req, res, next) {
         //如果提交文件的form中将上传文件的input名设置为tmpFile，就从tmpFile中取上传文件。否则取for in循环第一个上传的文件。
         if (file.tmpFile) {
             tmpfilePath = file.tmpFile.path;
-        } else {
+        }
+        else {
             for (var key in file) {
                 if (file[key].path && tmpfilePath === '') {
                     tmpfilePath = file[key].path;
@@ -45,7 +46,8 @@ router.post('/uploadpic', function (req, res, next) {
         if (('.jpg.jpeg.png.gif').indexOf(fileExt.toLowerCase()) === -1) {
             var err = new Error('此文件类型不允许上传');
             res.json({ code: -1, message: '此文件类型不允许上传' });
-        } else {
+        }
+        else {
             fileExt1 = fileExt.substring(1);
         }
 
@@ -76,19 +78,20 @@ router.post('/uploadpic', function (req, res, next) {
             f_c.upLoad(data, file_manager.FTP_PATH, function () {
                 //进入此处代表上传成功（前面已经做过错误处理）
                 console.log('upLoaded');
+                //删除临时目录中的文件，要等到上传成功后删除
+                fs.unlink(tmpfilePath, function (err) {
+                    if (err) {
+                        throw new Error("删除暂存文件失败");
+                    }
+                });
             });
             //回传rec_id到post回执
             file_manager_model.additem(file_manager, function (id) {
-                res.json({ "id": file_manager.REC_ID  });
+                res.json({ "id": file_manager.REC_ID,"path":"/file_manager/load?id="+ file_manager.REC_ID });
             });
-            //删除临时目录中的文件
-            fs.unlink(tmpfilePath,function(err)
-            {
-                if (err) {
-                    throw new Error("删除暂存文件失败");
-                }
-            });
-        
+
+
+
         });
 
 
@@ -101,8 +104,14 @@ router.get('/load', function (req, res, next) {
     if (typeof (req.query.id) == "undefined") {//没有指定id
         throw new Error("没有指定id");
     }
-    var rec_id = req.query.id;
 
+    file_manager_model.read_item(req.query.id, function (file_manager_info) {
+        //初始化ftp函数
+        var f_c = new ftp_client();
+        f_c.Download(file_manager_info.FTP_PATH, function (buffer) {
+            res.send(buffer);  //直接回传流
+        });
+    });
 });
 
 module.exports = router;

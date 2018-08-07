@@ -11,13 +11,18 @@
     <script src="/js/jquery.form.js"></script>
     <!-- <link href="/css/bootstrap.min.css" type="text/css" rel="stylesheet" charset=“utf-8”>
     <script src="/js/bootstrap.min.js"></script> -->
+    <script src="/js/vue.js"></script>
 
-
-    <link rel="stylesheet" href="/light7/dist/css/light7.min.css" type="text/css" >
+    <link rel="stylesheet" href="/light7/dist/css/light7.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/buttons.css" type="text/css">
     <script type='text/javascript' src='/light7/dist/js/light7.min.js'></script>
     <script src="/js/ajaxfileupload.js"></script>
 
-
+    <style>
+        input[type=button].button {
+            width: auto;
+        }
+    </style>
 
 </head>
 
@@ -29,35 +34,36 @@
         <div class="page page-current" id="homerouter">
 
             <div class="content">
-                <div class="list-block">
-                    <ul>
-                        <!-- Text inputs -->
+                <form id="USER_FORM_SUBMI" action="/user_view/case/user_form_submit" method="POST" enctype="multipart/form-data">
+                    <div class="list-block">
+                        <div class="modal modal-no-buttons" id="test">
+                            <div class="modal-inner">
 
-                        <li>
-                            <div class="item-content">
-                                <div class="item-media">
-                                    <i class="icon icon-form-toggle"></i>
-                                </div>
-                                <div class="item-inner">
-                                    <div class="item-title label">图片上传</div>
-                                    <div class="item-input">
-                                        <form enctype='multipart/form-data' action="/file_manager/uploadpic" method="POST">
-                                            <!-- <form  action="/file_manager/upload" method="POST" > -->
-                                            <p>
-                                                <input type="file" id="a111" name="image" accept=“image/*” />
-                                            </p>
-                                            <input type="submit" name="suform" id="suform" value="上传" />
+                                <div class="modal-title">dfgdfg</div>
 
-                                        </form>
-                                    </div>
-                                </div>
+
+                                <div class="modal-text">dgfdg</div>
+
+
+
+
                             </div>
-                        </li>
-                    </ul>
-                    <p>
-                        <a id="test" class="button">Big Button </a>
-                    </p>
-                </div>
+
+                            <div class="modal-buttons">
+
+                                <span class="modal-button modal-button-bold">asdsad</span>
+
+                            </div>
+
+                        </div>
+
+                        <ul id='sub_form_list'>
+                            <common-list v-bind:params="item" v-for="item in items"></common-list>
+
+                        </ul>
+
+                    </div>
+                </form>
             </div>
         </div>
 
@@ -65,17 +71,17 @@
 </body>
 
 <script src="/custom_js/getRequest.js"></script>
-<script src="/custom_js/listfactory.js"></script>
 
 <script>
     var case_info = new Object();
-    //初始化，读取case_node信息，读取
+
     $(function () {
-       
         var Request = new Object();
+
         Request = GetRequest();
         //通过类获取该url的id
         var case_id = Request["id"];
+        //初始化，读取case_node信息
         $.ajax({
             type: "get",
             url: '/user_view/case/getUserSubForm',
@@ -83,19 +89,69 @@
             dataType: "json",
             success: function (data) {
                 case_info = data;
-
+                data.UserSubForm.forEach(function (form_item) {
+                    k.items.push(form_item);
+                });
+                //添加一个提交按钮
+                k.items.push({ type: "submit", label: "提交", value: "提交申请" });
             },
             error: function (data) {
                 alert("操作出现错误" + data);
                 console.log(data);
             }
         });
+    });
 
+    //表单提交的回调绑定
+    jQuery("#formLogin").ajaxForm(function (data) {
+        if (typeof (data.code) == "undefined") {
+            $.alert("出现严重错误");
+        }
+        if (data.code) {
+            $.alert(data.message);
+        }
+        else {
+            $.alert(data.message);
+        }
+    });
+
+
+</script>
+<!-- vue代码 -->
+<!-- 引入自己编写的有关组件库 -->
+<script src="/component/list_component.js"></script>
+<script>
+    // 简单做一下图标头和尾部
+
+    var headerVue = new Vue({
+        template: '<header class="bar bar-nav"><h1 class="title">{{title}}</h1></header>'
     });
 </script>
+<!-- 表单生成工厂 -->
 <script>
 
 
+    var k = new Vue({
+        el: '#sub_form_list',
+        components: {
+            'common-list': CommonList,
+        },
+        data: function () {
+            return {
+                "chdval": {
+                    "type": "text",
+                    "label": "身份证",
+                    "id": "identity",
+                    "data-type": "string",
+                    "data-length": "13,13",
+                    "data-char-limit": "[0-9]"
+                }
+                ,
+                "items": []
+            }
+        },
+
+    })
 </script>
 
 </html>

@@ -41,6 +41,7 @@ var ftp_client = function () {
         var filepath = path.substring(0, path.lastIndexOf('/'));
 
         c.on('ready', function () {
+            //扫描一遍目录，如果没有这个目录则新建
             c.list(filepath, function (err, list) {
                 if (err) {
                     //此处参数true 递归创建目录，可创建多级
@@ -61,12 +62,7 @@ var ftp_client = function () {
 
 
         });
-        c.connect({
-            host: "127.0.0.1",
-            port: 21,
-            user: "jiaojftp",
-            password: "jiaojftp"
-        });
+        c.connect(ftp_config);
     }
 
 

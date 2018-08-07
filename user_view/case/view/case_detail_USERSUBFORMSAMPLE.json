@@ -2,90 +2,93 @@
     "node_cate": "start",
     "UserSubForm": [
         {
+            "type": "text",
             "label": "姓名",
             "id": "name",
             "data-type": "string",
             "data-length": "0,20"
         },
         {
-            "label": "身份证",
+            "type": "text",
+            "label": "身份证号码",
             "id": "identity",
             "data-type": "string",
             "data-length": "13,13",
             "data-char-limit": "[0-9]"
         },
         {
-            "label": "驾驶人身份证原件(正面)",
+            "type": "picture-modal",
+            "label": "身份证(正面)",
             "id": "identity_img_front",
             "data-type": "image",
             "data-example-url": "/file_manager/load?id=jsrsfzzm"
         },
         {
-            "label": "驾驶人身份证原件(反面)",
+            "type": "picture-modal",
+            "label": "身份证(反面)",
             "id": "identity_img_back",
             "data-type": "image",
             "data-example-url": "/file_manager/load?id=jsrsfzzm"
         },
         {
-            "label": "驾驶人身份证复印件",
+            "type": "picture-modal",
+            "label": "身份证复印件",
             "id": "identity_img_copy",
             "data-type": "image",
             "data-example-url": "/file_manager/load?id=jsrsfz"
         },
         {
-            "label": "驾驶人一寸白底照片",
+            "type": "picture-modal",
+            "label": "一寸白底照片",
             "id": "person_pic_white",
             "data-type": "image",
             "data-example-url": "/file_manager/load?id=yczp"
         },
         {
+            "type": "picture-modal",
             "label": "遗失证明",
             "id": "lost_prove",
             "data-type": "image",
-            "data-example-url": "/file_manager/load?id=yczp"
+            "data-example-url": "/file_manager/load?id=yszm"
         }
     ],
     "Return_json": {
-        "UserSubForm": {
-            "time": "",
-            "user":"",
-            "form": [
-                {
-                    "label": "姓名",
-                    "id": "name",
-                    "value": ""
-                },
-                {
-                    "label": "身份证",
-                    "id": "identity",
-                    "value": ""
-                },
-                {
-                    "label": "驾驶人身份证原件(正面)",
-                    "id": "identity_img_front",
-                    "value": ""
-                },
-                {
-                    "label": "驾驶人身份证原件(反面)",
-                    "id": "identity_img_back",
-                    "value": ""
-                },
-                {
-                    "label": "驾驶人身份证复印件",
-                    "id": "identity_img_copy",
-                    "value": ""
-                },
-                {
-                    "label": "驾驶人一寸白底照片",
-                    "id": "person_pic_white",
-                    "value": ""
-                },
-                {
-                    "label": "遗失证明",
-                    "id": "lost_prove",
-                    "value": ""
-                }
-            ]
-        }
+        "form": [
+            {
+                "label": "姓名",
+                "id": "name",
+                "value": ""
+            },
+            {
+                "label": "身份证号码",
+                "id": "identity",
+                "value": ""
+            },
+            {
+                "label": "身份证(正面)",
+                "id": "identity_img_front",
+                "value": ""
+            },
+            {
+                "label": "身份证(反面)",
+                "id": "identity_img_back",
+                "value": ""
+            },
+            {
+                "label": "身份证复印件",
+                "id": "identity_img_copy",
+                "value": ""
+            },
+            {
+                "label": "一寸白底照片",
+                "id": "person_pic_white",
+                "value": ""
+            },
+            {
+                "label": "遗失证明",
+                "id": "lost_prove",
+                "value": ""
+            }
+        ]
     }
 }
