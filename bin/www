@@ -88,3 +88,25 @@ function onListening() {
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
+
+//为了程序不跳出，此处捕获所有未捕获回调，并打出log
+process.on('uncaughtException', function(err){
+
+  //所以这里的回调你不要妄想太多,打算打印一下错误信息还是可以的 
+  console.error("uncaughtException ERROR");
+  if (typeof err === 'object') {
+      if (err.message) {
+          console.error('ERROR: ' + err.message)
+      }
+      if (err.stack) {
+          console.error(err.stack);
+      }
+  } else {
+      console.error('argument is not an object');
+  }
+
+
+  //然后你还可以做一些手脚,优雅的退出
+
+});
+

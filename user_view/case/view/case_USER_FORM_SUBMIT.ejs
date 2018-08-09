@@ -14,11 +14,13 @@
     <script src="/js/bootstrap.min.js"></script> -->
     <script src="/js/vue.js"></script>
 
+    <link rel="stylesheet" href="/iconfonts/iconfont.css" type="text/css">
     <link rel="stylesheet" href="/light7/dist/css/light7.min.css" type="text/css">
+    <link rel="stylesheet" href="/iconfonts/iconfont.css" type="text/css">
     <link rel="stylesheet" href="/css/buttons.css" type="text/css">
     <script type='text/javascript' src='/light7/dist/js/light7.min.js'></script>
     <script src="/js/ajaxfileupload.js"></script>
-    
+
     <style>
         input[type=button].button {
             width: auto;
@@ -31,19 +33,17 @@
 
 
     <div class="page-group">
-       
-        
+
+
         <!-- 首页 -->
         <div class="page page-current" id="homerouter">
-                <div id="headerfooter">
-                        <simple-header ti="表单提交"></simple-header>
-                        <simple-footer ></simple-footer>
-                </div>
+            <div id="headerfooter">
+                <simple-header ti="表单提交"></simple-header>
+                <simple-footer></simple-footer>
+            </div>
             <div class="content">
-                <form id="USER_FORM_SUBMI" action="/user_view/case/user_form_submit" method="POST" enctype="multipart/form-data">
+                <form id="USER_FORM_SUBMIT" action="/user_view/case/user_form_submit" method="POST" enctype="multipart/form-data">
                     <div class="list-block">
-
-
                         <ul id='sub_form_list'>
                             <common-list v-bind:params="item" v-for="item in items"></common-list>
 
@@ -68,6 +68,7 @@
         Request = GetRequest();
         //通过类获取该url的node_id
         var case_node_id = Request["id"];
+        var case_progres_id = Request["progress"];
         //初始化，读取case_node信息
         $.ajax({
             type: "get",
@@ -81,10 +82,9 @@
                 });
                 //新增申请特殊处理,仅适用于没创建caseprogress情况
                 if (data.node_cate == "start") {
-                    //添加一个隐藏输入，存储新增表单的case_id
-                    k.items.push({ type: "visi", id: "case_id", value: data.case_id });
                     //添加一个提交按钮
                     k.items.push({ type: "submit", label: "提交", value: "提交申请" });
+                    //显示一个noti框用于第一次提交的人显示须知
                     var newmodal = $.modal({
                         title: data.notification_title,
                         afterText: data.notification,
@@ -109,7 +109,13 @@
                 else {
                     //添加一个提交按钮
                     k.items.push({ type: "submit", label: "提交", value: "提交填写" });
+                    //添加一个隐藏输入，存储新增表单的case_progress_id
+                    k.items.push({ type: "visi", id: "case_progress_id", value: case_progres_id });
                 }
+                //添加一个隐藏输入，存储新增表单的case_id
+                k.items.push({ type: "visi", id: "case_id", value: data.case_id });
+                //添加一个隐藏输入，存储新表单的case_node_id
+                k.items.push({ type: "visi", id: "case_node_id", value: case_node_id });
             },
             error: function (data) {
                 alert("操作出现错误" + data);
@@ -119,7 +125,7 @@
     });
 
     //表单提交的回调绑定
-    jQuery("#USER_FORM_SUBMI").ajaxForm(function (data) {
+    jQuery("#USER_FORM_SUBMIT").ajaxForm(function (data) {
         if (typeof (data.code) == "undefined") {
             $.alert("出现严重错误");
         }
@@ -138,10 +144,10 @@
 <script src="/component/simple_header.js"></script>
 <script>
     new Vue({
-        el:'#headerfooter',
+        el: '#headerfooter',
         components: {
-            'simple-header': header
-        },      
+
+        },
     })
 </script>
 <!-- 引入自己编写的有关组件库 -->
@@ -164,7 +170,7 @@
         },
         data: function () {
             return {
-                
+
                 "items": []
             }
         },

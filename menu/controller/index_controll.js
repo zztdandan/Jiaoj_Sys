@@ -1,21 +1,22 @@
 var express = require('express');
 var router = express.Router();
-var path=require('path');
-var user_menu = require("../model/user_menu_model");
-var user_warning = require("../model/user_warning_model");
+var path = require('path');
+var user_menu = require('../model/user_menu_model');
+var user_warning = require('../model/user_warning_model');
 
 
 //首页渲染
 //读取用户业务目录
-router.get('/', new user_menu().read_user_menu);
+
 //读取用户推送通知
 
 //首页controller
 router.get('/', function (req, res, next) {
-   
-    var menuList = req.read_user_menu;
-    console.log("首页controller");
-    res.render('menu/view/menu_app.ejs', { "menuList": menuList});
+
+    user_menu.read_user_menu(function (menuList) {
+        console.log('首页controller');
+        res.render('menu/view/menu_app.ejs');
+    });
 });
 //首页end
 
@@ -25,17 +26,17 @@ router.get('/', function (req, res, next) {
 //警告get
 // var user_info=require("./userinfo");
 // var uvnew=new user_warning(user_info);
-var uvnew=new user_warning();
+var uvnew = new user_warning();
 router.get('/user_warning_info', uvnew.read_user_warning);
 // router.use('/user_warning_info', uvnew.del_user_warning);
 router.get('/user_warning_info', function (req, res, next) {
     var warningInfo = null;
-    if (req.read_user_warning!=null) {
+    if (req.read_user_warning != null) {
         warningInfo = req.read_user_warning;
     }
     res.json(warningInfo);
 
-})
+});
 // 警告end
 
 module.exports = router;

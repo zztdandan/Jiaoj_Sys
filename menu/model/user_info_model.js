@@ -57,23 +57,12 @@ user_info_model.get_user_by_token = function (token, next) {
     crypto.decipher(crypto.algorithm, crypto.key, token, function (decrypted) {
         b.decrypted = decrypted;
         var user_info_json = JSON.parse(b.decrypted);
-  
-    
         next(user_info_json);
-   
     });
     
 
 
 }
-
-
-
-
-
-
-
-
 module.exports = user_info_model;
 
 //token加密
