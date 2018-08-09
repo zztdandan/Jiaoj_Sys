@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>开始使用layui</title>
+  <link rel="stylesheet" href="/layui/css/layui.css">
+
+  <script src="../layui/layui.all.js"></script>
+</head>
+
+<body>
+
+  <!-- 你的HTML代码 -->
+
+  <div class="layui-header header header-doc" summer="">
+    <div class="layui-main">      
+      <div class="layui-form component">        
+
+      <ul class="layui-nav">
+        <li class="layui-nav-item layui-this">
+          <a href="/doc/">文档
+            <!--  -->
+          </a>
+        </li>
+        <li class="layui-nav-item ">
+          <a href="/demo/">示例
+            <!-- <span class="layui-badge-dot"></span> -->
+          </a>
+        </li>
+
+        <li class="layui-nav-item layui-hide-xs">
+          <a href="http://fly.layui.com/" target="_blank">社区</a>
+        </li>
+
+
+        <li class="layui-nav-item">
+          <!--<span class="layui-badge-dot" style="margin: -4px 3px 0;"></span>-->
+          <a href="javascript:;">周边
+            <span class="layui-nav-more"></span>
+          </a>
+          <dl class="layui-nav-child">
+            <dd class="layui-hide-sm layui-show-xs">
+              <a href="http://fly.layui.com/" target="_blank">社区交流</a>
+              <hr>
+            </dd>
+            <dd>
+              <a href="http://layim.layui.com/" target="_blank">即时聊天</a>
+            </dd>
+
+            <hr>
+            <dd>
+              <a href="/admin/" target="_blank">后台模板</a>
+            </dd>
+            <dd>
+              <a href="/template/fly/" target="_blank">社区模板</a>
+            </dd>
+            <dd>
+              <a href="/template/xianyan/" target="_blank">轻博客模板
+                <span class="layui-badge-dot"></span>
+              </a>
+            </dd>
+
+            <hr>
+            <dd>
+              <a href="/alone.html" target="_blank">独立组件</a>
+            </dd>
+            <dd>
+              <a href="http://fly.layui.com/jie/24209/" target="_blank">Axure组件</a>
+            </dd>
+          </dl>
+        </li>
+
+        <li class="layui-nav-item layui-hide-xs" lay-unselect="">
+          <a href="/admin/">官方后台模板
+            <span class="layui-badge-dot"></span>
+          </a>
+        </li>
+        <span class="layui-nav-bar"></span>
+      </ul>
+    </div>
+  </div>
+  <script>
+    //由于模块都一次性加载，因此不用执行 layui.use() 来加载对应模块，直接使用即可：
+    ; !function () {
+      var layer = layui.layer
+        , form = layui.form;
+
+      layer.msg('Hello World');
+    }();
+  </script>
+</body>
+
+</html>

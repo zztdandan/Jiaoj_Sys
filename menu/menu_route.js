@@ -4,7 +4,7 @@ var express = require('express');
 var router = express.Router();
 var path=require('path');
 var index_controll=require(path.join(__dirname,'controller','index_controll'));
-var userinfo=require(path.join(__dirname,'controller','userinfo'));
+var userinfo=require(path.join(process.cwd(),'user_view','controller','userinfo'));
 var login_controller=require(path.join(__dirname,'controller','login_controller'));
 var menu_controller=require(path.join(__dirname,'controller','menu_controller'));
 

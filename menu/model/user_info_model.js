@@ -1,6 +1,7 @@
 var easy_mysql = require(process.cwd() + '/mydb/easy_mysql');
 var path = require('path');
 var crypto = require(path.join(process.cwd(), 'menu', 'logic', 'crypto'));
+const csexception = require(path.join(process.cwd(), 'logic', 'csexception'));
 
 
 
@@ -29,29 +30,32 @@ user_info_model.check_user_login = function (phone, pwd, next) {
             throw err;
         }
         if (rows.length == 0) {
-            next(false, null);
+            next(new csexception(false, '', {}));
         }
         else {
-            next(true, rows[0]);
+            next(new csexception(true, 'success', rows[0]));
         }
 
     });
 };
+
+//通过电话密码获得user是否通过信息
 user_info_model.check_and_login_user = function (phone, pwd, next) {
     var path = require('path');
     var crypto = require(path.join(process.cwd(), 'menu', 'logic', 'crypto'));
-    this.check_user_login(phone, pwd, function (bol, row) {
-        if (!bol) {
-            next(bol);
+    user_info_model.check_user_login(phone, pwd, function (csexception) {
+        if (!csexception.flag) {
+            next(csexception.flag);
         }
         else {
-            user_info_model.crypto_token(row, crypto, next);
+            user_info_model.crypto_token(csexception.data, crypto, next);
         }
 
 
     });
 };
 
+//从token中取出user_info结构体
 user_info_model.get_user_by_token = function (token, next) {
     var b = new Object();
     crypto.decipher(crypto.algorithm, crypto.key, token, function (decrypted) {
@@ -59,15 +63,15 @@ user_info_model.get_user_by_token = function (token, next) {
         var user_info_json = JSON.parse(b.decrypted);
         next(user_info_json);
     });
-    
+
 
 
 };
 
 
 
-//token加密
-user_info_model.crypto_token=function(row, crypto, next) {
+//user_token加密
+user_info_model.crypto_token = function (row, crypto, next) {
     var curDate = new Date();
     var startDate = new Date(curDate.setDate(curDate.getDate() + 1));
     var a_token = JSON.stringify({ 'phone': row.FORIEGN_PHONENUM, 'time': startDate.getTime(), 'userid': row.REC_ID });
@@ -76,17 +80,18 @@ user_info_model.crypto_token=function(row, crypto, next) {
     });
 };
 
-//token解密
-user_info_model.token_decrypto=function(crypto, req, next, res) {
-    crypto.decipher(crypto.algorithm, crypto.key, req.cookies.token, function (decrypted) {
+//user_token解密
+user_info_model.token_decrypto = function (token, next) {
+    crypto.decipher(crypto.algorithm, crypto.key, token, function (decrypted) {
         var user_info_json = JSON.parse(decrypted);
         var that_time = user_info_json.time;
         var this_time = new Date().getTime();
         if (that_time >= this_time) {
-            next();
+            //! 注意回调函数特性，后面要用else包裹
+            next(new csexception(true, 'failure', {}));
         }
         else {
-            res.redirect('/login');
+            next(new csexception(true, 'success', {}));
         }
     });
 };

@@ -24,7 +24,7 @@ router.get('/', function (req, res, next) {
 
 
 //警告get
-// var user_info=require("./userinfo");
+
 // var uvnew=new user_warning(user_info);
 var uvnew = new user_warning();
 router.get('/user_warning_info', uvnew.read_user_warning);

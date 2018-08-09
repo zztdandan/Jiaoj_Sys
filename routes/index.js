@@ -1,5 +1,5 @@
 //* 总路由，注册各个area
-var path=require("path");
+var path=require('path');
 var express = require('express');
 var router = express.Router();
 //using ejs 引擎
