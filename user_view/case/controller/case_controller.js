@@ -64,14 +64,15 @@ router.post('/user_form_submit', function (req, res, _next) {
 			throw new Error('表单不包含合理字段无法提交');
 		}
 		//数据全在fields里面，具体哪些字段，可读取case_node表。
-		console.log(fields);
+		// console.log(fields);
 		//根据表单的node信息读取node
 		case_node_model.read_node_by_id(fields.case_node_id, function (node) {
-			if (typeof (node.node_detail.Return_json) == 'undefined') {
+			var node_detail=JSON.parse(node.node_detail);
+			if (typeof (node_detail.Return_json) == 'undefined') {
 				throw new Error('node读取失败或case_node_detail设置不合理');
 			}
-			var returnjson_form = JSON.parse(node.node_detail).Return_json.form;
-			console.log(returnjson_form);
+			var returnjson_form = node_detail.Return_json.form;
+			// console.log(returnjson_form);
 			//这是同步函数
 			returnjson_form.forEach(function (element) {
 				if (typeof (fields[element.id]) != undefined) {
@@ -125,7 +126,7 @@ router.post('/user_form_submit', function (req, res, _next) {
 				}
 			});
 			//判断该node性质，如果是新节点，则新建一个case_progress，如果不是新节点，则寻找case_progress
-			console.log(returnjson_form);
+			// console.log(returnjson_form);
 		});
 	});
 });

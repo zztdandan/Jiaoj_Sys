@@ -8,11 +8,30 @@ var app = require('../app');
 var debug = require('debug')('jiaoj-node:server');
 var http = require('http');
 
+
+
+
+
+
+//* 设置字段以function(){return}返回的方式运行，根据不同情况返回不同字段即可
+
+function a() {
+	if (process.env.NODE_ENV == 'development') {
+		return 3000;
+	} else {
+		return 3000;
+	}
+}
+process.env.PORT = a();
+
+
+
+//* 设置全局字段的值，本地开发为development
+
 /**
  * Get port from environment and store in Express.
  */
-
-var port = normalizePort(process.env.PORT || '3000');
+var port = normalizePort(process.env.PORT);
 app.set('port', port);
 
 /**
@@ -34,19 +53,19 @@ server.on('listening', onListening);
  */
 
 function normalizePort(val) {
-  var port = parseInt(val, 10);
+	var port = parseInt(val, 10);
 
-  if (isNaN(port)) {
-    // named pipe
-    return val;
-  }
+	if (isNaN(port)) {
+		// named pipe
+		return val;
+	}
 
-  if (port >= 0) {
-    // port number
-    return port;
-  }
+	if (port >= 0) {
+		// port number
+		return port;
+	}
 
-  return false;
+	return false;
 }
 
 /**
@@ -54,27 +73,27 @@ function normalizePort(val) {
  */
 
 function onError(error) {
-  if (error.syscall !== 'listen') {
-    throw error;
-  }
+	if (error.syscall !== 'listen') {
+		throw error;
+	}
 
-  var bind = typeof port === 'string'
-    ? 'Pipe ' + port
-    : 'Port ' + port;
+	var bind = typeof port === 'string'
+		? 'Pipe ' + port
+		: 'Port ' + port;
 
-  // handle specific listen errors with friendly messages
-  switch (error.code) {
-    case 'EACCES':
-      console.error(bind + ' requires elevated privileges');
-      process.exit(1);
-      break;
-    case 'EADDRINUSE':
-      console.error(bind + ' is already in use');
-      process.exit(1);
-      break;
-    default:
-      throw error;
-  }
+	// handle specific listen errors with friendly messages
+	switch (error.code) {
+		case 'EACCES':
+			console.error(bind + ' requires elevated privileges');
+			process.exit(1);
+			break;
+		case 'EADDRINUSE':
+			console.error(bind + ' is already in use');
+			process.exit(1);
+			break;
+		default:
+			throw error;
+	}
 }
 
 /**
@@ -82,31 +101,31 @@ function onError(error) {
  */
 
 function onListening() {
-  var addr = server.address();
-  var bind = typeof addr === 'string'
-    ? 'pipe ' + addr
-    : 'port ' + addr.port;
-  debug('Listening on ' + bind);
+	var addr = server.address();
+	var bind = typeof addr === 'string'
+		? 'pipe ' + addr
+		: 'port ' + addr.port;
+	debug('Listening on ' + bind);
 }
 
 //为了程序不跳出，此处捕获所有未捕获回调，并打出log
-process.on('uncaughtException', function(err){
+process.on('uncaughtException', function (err) {
 
-  //所以这里的回调你不要妄想太多,打算打印一下错误信息还是可以的 
-  console.error("uncaughtException ERROR");
-  if (typeof err === 'object') {
-      if (err.message) {
-          console.error('ERROR: ' + err.message)
-      }
-      if (err.stack) {
-          console.error(err.stack);
-      }
-  } else {
-      console.error('argument is not an object');
-  }
+	//所以这里的回调你不要妄想太多,打算打印一下错误信息还是可以的 
+	console.error('uncaughtException ERROR');
+	if (typeof err === 'object') {
+		if (err.message) {
+			console.error('ERROR: ' + err.message);
+		}
+		if (err.stack) {
+			console.error(err.stack);
+		}
+	} else {
+		console.error('argument is not an object');
+	}
 
 
-  //然后你还可以做一些手脚,优雅的退出
+	//然后你还可以做一些手脚,优雅的退出
 
 });
 

@@ -4,7 +4,7 @@
 //key='jiaojsys'
 ///////////////////////////
 var crypto = require('crypto');
-fs = require('fs');
+var fs = require('fs');
 
 //加密
 // function cipher(algorithm, key, buf ,cb){
@@ -47,7 +47,7 @@ function encrypteFunc(){
 }
 //加密
 encrypteFunc.cipher=function(algorithm, key, buf ,cb){
-    var encrypted = "";
+    var encrypted = '';
     var cip = crypto.createCipher(algorithm, key);
     encrypted += cip.update(buf, 'binary', 'hex');
     encrypted += cip.final('hex');
@@ -57,10 +57,10 @@ encrypteFunc.key='jiaojsys';
 encrypteFunc.algorithm='rc4';
 //解密
 encrypteFunc.decipher=function (algorithm, key, encrypted,cb){
-    var decrypted = "";
+    var decrypted = '';
     var decipher = crypto.createDecipher(algorithm, key);
     decrypted += decipher.update(encrypted, 'hex', 'binary');
     decrypted += decipher.final('binary');
     cb(decrypted);
-}
+};
 module.exports=encrypteFunc;

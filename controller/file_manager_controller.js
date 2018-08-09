@@ -21,7 +21,7 @@ router.post('/uploadpic', function (req, res, next) {
     form.parse(req, function (err, fields, file) {
         if (err) {
             err.status = 414;
-            err.message = "上传功能出错";
+            err.message = '上传功能出错';
             throw err;
         }
         //第一步，获得文件地址
@@ -44,7 +44,7 @@ router.post('/uploadpic', function (req, res, next) {
         var fileExt1;
         var fileExt = tmpfilePath.substring(tmpfilePath.lastIndexOf('.'));
         if (('.jpg.jpeg.png.gif').indexOf(fileExt.toLowerCase()) === -1) {
-            var err = new Error('此文件类型不允许上传');
+            err = new Error('此文件类型不允许上传');
             res.json({ code: -1, message: '此文件类型不允许上传' });
         }
         else {
@@ -62,12 +62,15 @@ router.post('/uploadpic', function (req, res, next) {
             }
             //指定该ftp存储一系列参数用于存入数据库
             var file_manager = new Object();
+            //8位随即串作为rec
+            //!与下面的用户名是不同的随机串
             file_manager.REC_ID = randomword(false, 8);
-            file_manager.FILE_NAME = filename = randomword(false, 8) + fileExt;
+            //8位随机串作为文件名
+            var filename = randomword(false, 8) + fileExt;
+            file_manager.FILE_NAME =filename;
             file_manager.FILE_TYPE = 'ftp';
             file_manager.FTP_CONFIG = JSON.stringify(require('./ftp_config'));
-            file_manager.FTP_PATH
-            if (typeof (fields.pic_type) != "undefined") {
+            if (typeof (fields.pic_type) != 'undefined') {
                 fileSavepath = fileSavepath + '/' + fields.pic_type;
             }
             fileSavepath = fileSavepath + '/' + moment().format('YYYYMMDD');
@@ -81,13 +84,13 @@ router.post('/uploadpic', function (req, res, next) {
                 //删除临时目录中的文件，要等到上传成功后删除
                 fs.unlink(tmpfilePath, function (err) {
                     if (err) {
-                        throw new Error("删除暂存文件失败");
+                        throw new Error('删除暂存文件失败');
                     }
                 });
             });
             //回传rec_id到post回执
             file_manager_model.additem(file_manager, function (id) {
-                res.json({ "id": file_manager.REC_ID,"path":"/file_manager/load?id="+ file_manager.REC_ID });
+                res.json({ 'id': file_manager.REC_ID,'path':'/file_manager/load?id='+ file_manager.REC_ID });
             });
 
 
@@ -101,8 +104,8 @@ router.post('/uploadpic', function (req, res, next) {
 });
 router.get('/load', function (req, res, next) {
 
-    if (typeof (req.query.id) == "undefined") {//没有指定id
-        throw new Error("没有指定id");
+    if (typeof (req.query.id) == 'undefined') {//没有指定id
+        throw new Error('没有指定id');
     }
 
     file_manager_model.read_item(req.query.id, function (file_manager_info) {

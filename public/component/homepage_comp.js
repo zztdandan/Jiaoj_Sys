@@ -14,7 +14,7 @@ var CaseItem = Vue.extend({
     props: ['itemdetail'],
     template:
 
-        '<div class="button button-primary button-box new-btn">' +
+        '<div class="new-btn">' +
         '<span :class="item_detail.menu_icon"></span>' +
         '<span class="case-item-title">{{item_detail.menu_title}}</span>' +
         '</div>',
@@ -31,7 +31,7 @@ var CaseItem = Vue.extend({
         $(".menu-icon").css("line-height", 1.1);
         $(".case-item-title").css("font-size", s * 0.1);
         $(".case-item-title").css("line-height", 2);
-        // $(".case-item-title").css("margin-top", -s * 0.1);
+         $(".case-item-title").css("margin-top", -s * 0.1);
     },
     updated:function(){
         var s = parseFloat($('.new-btn').css("width"));
@@ -39,6 +39,7 @@ var CaseItem = Vue.extend({
         $(".menu-icon").css("font-size", s * 0.75);
         $(".menu-icon").css("line-height", 1);
         $(".case-item-title").css("font-size", s * 0.7);
+        $(".case-item-title").css("margin-top", -s * 0.1);
     }
 
 });

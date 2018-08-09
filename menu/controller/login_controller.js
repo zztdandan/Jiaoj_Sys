@@ -18,12 +18,12 @@ router.post('/', function (req, res, next) {
 
     user_info_model.check_and_login_user(req.body.phone_num, req.body.pwd, function (bol, token) {
         if (bol) {
-            res.cookie("token", token, { maxAge: 59 * 60 * 24 * 1000 });//注册时间为23小时59分
-            res.json({ "bol": true });
+            res.cookie('token', token, { maxAge: 59 * 60 * 24 * 1000 });//注册时间为23小时59分
+            res.json({ 'bol': true });
         }
         else {
-            res.clearCookie("token");
-            res.json({ "bol": false });
+            res.clearCookie('token');
+            res.json({ 'bol': false });
         }
 
     });

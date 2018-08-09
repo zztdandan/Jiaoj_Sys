@@ -14,7 +14,7 @@
         "no-console": "off",
         "indent":"off",
         "linebreak-style": [
-            "error",
+           "off",
             "windows"
         ],
         "quotes": [

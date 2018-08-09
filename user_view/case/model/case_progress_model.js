@@ -14,10 +14,10 @@ var case_progress_model = function () {
     this.NODE_ID = 0;
     this.REC_ID = '';
     //定义全局的progress里面的content的数据格式
-    this.content = {
+    this.content =JSON.stringify( {
         status: {},
         history: []
-    };
+    });
 };
 //业务实体按id查询
 case_progress_model.find_case_progress_by_id = function (REC_ID, next) {
@@ -31,8 +31,8 @@ case_progress_model.find_case_progress_by_id = function (REC_ID, next) {
 case_progress_model.init_new_case = function (node_id, userid, next) {
     try {
         var new_progress = new case_progress_model();
-        new_progress.CASE_ID = node_id.CASE_ID;
-        new_progress.NODE_ID = node_id.REC_ID;
+        new_progress.CASE_ID = node_id.case_id;
+        new_progress.NODE_ID = node_id.rec_id;
         new_progress.PROGRESS_CREATOR = userid;
         new_progress.PROGRESS_NAME = userid + ',' + new_progress.CASE_ID;
         new_progress.REC_ID = randomword(false, 8);
@@ -52,6 +52,9 @@ case_progress_model.update_case_progress = function (progress_rec_id, progress_n
 
     em.where('REC_ID="' + progress_rec_id + '"').find(function (progress_data) {
         progress_data.NODE_ID = progress_node;
+        if(typeof progress_content=='object'){
+            progress_content=JSON.stringify(progress_content);
+        }
         progress_data.CONTENT = progress_content;
         em.where('REC_ID="' + progress_rec_id + '"').save(progress_data, function (rows) {
             next(rows);
@@ -80,7 +83,7 @@ case_progress_model.update_progress_nosave_hasreturn = function (progress, node_
 };
 case_progress_model.create_new_progress_content = function (new_status, user_id) {
     //定义全局的progress里面的content的数据格式(已经在本函数里定义过)
-    var content = new case_progress_model().content;
+    var content =JSON.parse( new case_progress_model().content);
     //在returnjson里面添加两项历史变量
     new_status.user_id = user_id;
     new_status.time = moment().format('YYYYMMDDHHmmss');
