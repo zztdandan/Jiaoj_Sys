@@ -4,92 +4,130 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <title>开始使用layui</title>
-  <link rel="stylesheet" href="/layui/css/layui.css">
+  <title>首页</title>
 
-  <script src="../layui/layui.all.js"></script>
+  <!-- Bootstrap core CSS-->
+  <link href="/sbadmin/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" charset=“utf-8”>
+
+  <!-- Custom fonts for this template-->
+  <link href="/sbadmin/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css" charset=“utf-8”>
+  <!-- JiaoJNode-Custom-icon -->
+  <link rel="stylesheet" href="/iconfonts/iconfont.css" type="text/css" charset=“utf-8”>
+  <!-- Page level plugin CSS-->
+  <link href="/sbadmin/vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet" type="text/css" charset=“utf-8”>
+
+  <link rel="stylesheet" href="/css/buttons.css" type="text/css" charset=“utf-8”>
+  <link href="/sbadmin/css/sb-admin.css" rel="stylesheet" type="text/css" charset=“utf-8”>
 </head>
 
 <body>
+  <div id="PageVue">
+    
 
-  <!-- 你的HTML代码 -->
+    <div id="wrapper">
 
-  <div class="layui-header header header-doc" summer="">
-    <div class="layui-main">      
-      <div class="layui-form component">        
-
-      <ul class="layui-nav">
-        <li class="layui-nav-item layui-this">
-          <a href="/doc/">文档
-            <!--  -->
+      <!-- Sidebar -->
+      <ul class="sidebar navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="index.html">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Dashboard</span>
           </a>
         </li>
-        <li class="layui-nav-item ">
-          <a href="/demo/">示例
-            <!-- <span class="layui-badge-dot"></span> -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+            aria-expanded="false">
+            <i class="fas fa-fw fa-folder"></i>
+            <span>Pages</span>
+          </a>
+          <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+            <h6 class="dropdown-header">Login Screens:</h6>
+            <a class="dropdown-item" href="login.html">Login</a>
+            <a class="dropdown-item" href="register.html">Register</a>
+            <a class="dropdown-item" href="forgot-password.html">Forgot Password</a>
+            <div class="dropdown-divider"></div>
+            <h6 class="dropdown-header">Other Pages:</h6>
+            <a class="dropdown-item" href="404.html">404 Page</a>
+            <a class="dropdown-item active" href="blank.html">Blank Page</a>
+          </div>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="charts.html">
+            <i class="fas fa-fw fa-chart-area"></i>
+            <span>Charts</span>
           </a>
         </li>
-
-        <li class="layui-nav-item layui-hide-xs">
-          <a href="http://fly.layui.com/" target="_blank">社区</a>
-        </li>
-
-
-        <li class="layui-nav-item">
-          <!--<span class="layui-badge-dot" style="margin: -4px 3px 0;"></span>-->
-          <a href="javascript:;">周边
-            <span class="layui-nav-more"></span>
-          </a>
-          <dl class="layui-nav-child">
-            <dd class="layui-hide-sm layui-show-xs">
-              <a href="http://fly.layui.com/" target="_blank">社区交流</a>
-              <hr>
-            </dd>
-            <dd>
-              <a href="http://layim.layui.com/" target="_blank">即时聊天</a>
-            </dd>
-
-            <hr>
-            <dd>
-              <a href="/admin/" target="_blank">后台模板</a>
-            </dd>
-            <dd>
-              <a href="/template/fly/" target="_blank">社区模板</a>
-            </dd>
-            <dd>
-              <a href="/template/xianyan/" target="_blank">轻博客模板
-                <span class="layui-badge-dot"></span>
-              </a>
-            </dd>
-
-            <hr>
-            <dd>
-              <a href="/alone.html" target="_blank">独立组件</a>
-            </dd>
-            <dd>
-              <a href="http://fly.layui.com/jie/24209/" target="_blank">Axure组件</a>
-            </dd>
-          </dl>
-        </li>
-
-        <li class="layui-nav-item layui-hide-xs" lay-unselect="">
-          <a href="/admin/">官方后台模板
-            <span class="layui-badge-dot"></span>
+        <li class="nav-item">
+          <a class="nav-link" href="tables.html">
+            <i class="fas fa-fw fa-table"></i>
+            <span>Tables</span>
           </a>
         </li>
-        <span class="layui-nav-bar"></span>
       </ul>
-    </div>
-  </div>
-  <script>
-    //由于模块都一次性加载，因此不用执行 layui.use() 来加载对应模块，直接使用即可：
-    ; !function () {
-      var layer = layui.layer
-        , form = layui.form;
 
-      layer.msg('Hello World');
-    }();
-  </script>
+      <div id="content-wrapper">
+
+        <div class="container-fluid">
+
+          <!-- Breadcrumbs-->
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+              <a href="index.html">Dashboard</a>
+            </li>
+            <li class="breadcrumb-item active">Blank Page</li>
+          </ol>
+
+          <!-- Page Content -->
+          <h1>Blank Page</h1>
+          <hr>
+          <p>This is a great starting point for new custom pages.</p>
+
+        </div>
+        <!-- /.container-fluid -->
+
+        <!-- Sticky Footer -->
+        <footer class="sticky-footer">
+          <div class="container my-auto">
+            <div class="copyright text-center my-auto">
+              <span>Copyright © Your Website 2018</span>
+            </div>
+          </div>
+        </footer>
+
+      </div>
+      <!-- /.content-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+      <i class="fas fa-angle-up"></i>
+    </a>
+
+   
+
 </body>
+<!-- Bootstrap core JavaScript-->
+<script src="/sbadmin/vendor/jquery/jquery.min.js"></script>
+<script src="/js/jquery.form.js"></script>
+<script src="/sbadmin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="/sbadmin/vendor/jquery-easing/jquery.easing.min.js"></script>
+<!-- <link href="/css/bootstrap.min.css" type="text/css" rel="stylesheet" charset=“utf-8”>
+<script src="/js/bootstrap.min.js"></script> -->
+<script src="/js/vue.js"></script>
+<!-- Custom scripts for all pages-->
+<script src="/sbadmin/js/sb-admin.min.js"></script>
+
+
+<!-- Vue组件化 -->
+<script>
+  var pageVue = new Vue({
+    el: '#PageVue',
+
+  });
+</script>
 
 </html>
