@@ -7,11 +7,7 @@ var AdminTitle = Vue.extend({
         ' </div>',
     data: function () {
         return {
-            button_value: '提交图片',
-            url_value: '',
-            input_id: 'id_' + this.params.id,
-            input_name: this.params.id,
-            suc_flag: ''
+
         };
     }
 });
@@ -64,7 +60,7 @@ var NavbarMessage = Vue.extend({
 });
 
 //modal共用模板
-var ModalCommon = Vue.component({
+var ModalCommon = Vue.component('modal-common',{
     props: { prop_modal_id: String },
     template:
         '<div class="modal fade" :id="modal_id" tabindex="-1" role="dialog" aria-hidden="true">' +
@@ -90,43 +86,47 @@ var ModalCommon = Vue.component({
             modal_id: this.prop_modal_id
         }
     }
-})
+});
 
 var LogoutModal = Vue.extend({
     props: {},
     template:
         '<div>' +
-        '<modal-common>' +
-        '<template slot="title">'+
+        '<modal-common prop_modal_id="logoutModal">' +
+        
+        '<template slot="title">' +
         '登出title' +
-        '</template>'+
-        '<template slot="body">'+
+        '</template>' +
+        '<template slot="body">' +
         '登出modal内容' +
-        '</template>'+        
-        '<template slot="footer">'+
+        '</template>' +
+        '<template slot="footer">' +
         '<button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>' +
         '<a class="btn btn-primary" href="login.html">Logout</a>' +
-        '</template>'+
-        '</modal-common>'+
+        '</template>' +
+        '</modal-common>' +
         '</div>',
     data: function () {
         return {
 
-        }        
+        }
     },
-    components:{
-        "modal-common":ModalCommon
+    components: {
+        "modalcommon": ModalCommon
     }
 
 
-})
+});
+
+
+
 
 
 var Navbaruser = Vue.extend({
     props: {},
     template:
-        '   <li class="nav-item dropdown no-arrow">' +
-        ' <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
+        '<li class="nav-item dropdown no-arrow">' +
+        '<a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
         '<i class="fas fa-bell fa-fw"></i>' +
         '</a>' +
         '<div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">' +
@@ -134,26 +134,31 @@ var Navbaruser = Vue.extend({
         '<a class="dropdown-item" href="#">Activity Log</a>' +
         '<div class="dropdown-divider"></div>' +
         '<a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">Logout</a>' +
+        
         '</div>' +
         '</li>',
     data: function () {
         return {
             messagenum: 0
         }
+    },
+    components: {
+       
     }
 });
 
-var NavbarComp = Vue.component({
+var NavbarComp = Vue.component('navbar-comp', {
     props: {},
     template:
         '<nav class="navbar navbar-expand navbar-dark bg-dark static-top">' +
         '<admin-title>交警系统管理后台</admin-title>' +
         '<navbar-search></navbar-search>' +
         '<ul class="navbar-nav ml-auto ml-md-0">' +
-        '<li :is="navbar-message"></li>' +
-        '<li :is="navbar-user"></li>' +
+        '<li is="navbar-message"></li>' +
+        '<li is="navbar-user"></li>' +
         '</ul>' +
         '</nav>'
+        
     ,
     data: function () {
         return {
@@ -174,15 +179,4 @@ var NavbarComp = Vue.component({
 
 
 
-
-
-
-<div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-    <a class="dropdown-item" href="#">Settings</a>
-    <a class="dropdown-item" href="#">Activity Log</a>
-    <div class="dropdown-divider"></div>
-    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">Logout</a>
-</div>
-        </li >
-    </ul >
 
