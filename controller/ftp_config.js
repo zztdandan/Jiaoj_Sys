@@ -1,6 +1,6 @@
 module.exports={
-    host: '127.0.0.1',
+    host: '140.143.26.135',
     port: 21,
-    user: 'jiaojftp',
-    password: 'jiaojftp'
+    user: 'ftpuser',
+    password: '7758521'
 };

@@ -26,7 +26,8 @@ router.post('/uploadpic', function (req, res, next) {
         }
         //第一步，获得文件地址
         var tmpfilePath = '';
-        var fileSavepath = '';
+        //!由于vsftpd设置，根目录是不可写的，所以设置直接进入ftp目录下（这个目录我已经在服务器上建好了）
+        var fileSavepath = '/ftp';
         //如果提交文件的form中将上传文件的input名设置为tmpFile，就从tmpFile中取上传文件。否则取for in循环第一个上传的文件。
         if (file.tmpFile) {
             tmpfilePath = file.tmpFile.path;
