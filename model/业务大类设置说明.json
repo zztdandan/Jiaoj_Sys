@@ -1,0 +1,11 @@
+//业务大类配置及其说明
+{
+    "name": "hot_title",
+    //name:显示在cate_menu表中的英文，也是用于more_case链接的索引英文
+    "c_name": "热门业务",
+    //c_name:显示在卡片头的中文
+    "top_num": 4,
+    //显示在首页的前几个元素的数目，首页会显示top_num+1个按钮，最后一个是more_case
+    "has_add": false
+}
+//是否显示more_case,如果是false，则首页只显示top_num个按钮
