@@ -160,4 +160,12 @@ router.get('/progress_next_node', function (req, res, next) {
         res.json(new csexception(true, 'success', data));
     });
 });
+
+router.get('/case_progress_history',function(req, res, next){
+    var case_progress_id = req.query.case_progress_id;
+    case_progress_model.find_case_progress_by_id(case_progress_id, function (case_progress) {
+        var res_json = JSON.parse(case_progress.content);
+        res.json(new csexception(true, 'success', res_json.history));
+    });
+});
 module.exports = router;
