@@ -3,6 +3,7 @@ var router = express.Router();
 var path = require('path');
 var user_menu = require('../model/user_menu_model');
 var user_warning = require('../model/user_warning_model');
+const csexception = require(path.join(process.cwd(), 'logic', 'csexception'));
 
 
 //首页渲染
@@ -34,7 +35,8 @@ router.get('/user_warning_info', function (req, res, next) {
     if (req.read_user_warning != null) {
         warningInfo = req.read_user_warning;
     }
-    res.json(warningInfo);
+    
+    res.json(new csexception(true,'suc',warningInfo));
 
 });
 // 警告end

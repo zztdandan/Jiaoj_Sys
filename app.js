@@ -42,7 +42,7 @@ app.use(function (req, res, next) {
 	var reqDomain = domain.create();
 	reqDomain.on('error', function (err) {  // 下面抛出的异常在这里被捕获,触发此事件
 		console.log(err);
-		res.send(500, err.stack);           // 成功给用户返回了 500
+		res.render('views/error.ejs', { 'errMsg': err.message, 'stat': err.status });           // 成功给用户返回了 500
 	});
 	reqDomain.run(next);
 });

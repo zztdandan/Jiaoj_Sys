@@ -14,7 +14,7 @@ var case_progress_model = function () {
     this.NODE_ID = 0;
     this.REC_ID = '';
     //定义全局的progress里面的content的数据格式
-    this.content =JSON.stringify( {
+    this.content = JSON.stringify({
         status: {},
         history: []
     });
@@ -47,21 +47,25 @@ case_progress_model.init_new_case = function (node_id, userid, next) {
     }
 };
 //只允许更新case_progress这两项属性，其他属性在init的时候已经定死了
+//请注意，传入此处的progress已经定性升级完毕，这一部只是修改一下case_node_id也就是移一下位置而已
 case_progress_model.update_case_progress = function (progress_rec_id, progress_node, progress_content, next) {
     var em = new easy_mysql('case_progress');
 
     em.where('REC_ID="' + progress_rec_id + '"').find(function (progress_data) {
         progress_data.NODE_ID = progress_node;
-        if(typeof progress_content=='object'){
-            progress_content=JSON.stringify(progress_content);
+        if (typeof progress_content == 'object') {
+            progress_content = JSON.stringify(progress_content);
         }
         progress_data.CONTENT = progress_content;
+        progress_data.LAST_TIME = moment().format('YYYYMMDDHHmmss');
         em.where('REC_ID="' + progress_rec_id + '"').save(progress_data, function (rows) {
             next(rows);
         });
     });
 };
 
+
+//在已有content的基础上制作一个更新的content
 case_progress_model.update_progress_nosave_hasreturn = function (progress, node_id, user_id, new_status) {
     //1、将content字符串格式化
     var progress_content = JSON.parse(progress.content);
@@ -69,7 +73,7 @@ case_progress_model.update_progress_nosave_hasreturn = function (progress, node_
     new_status.user_id = user_id;
     new_status.time = moment().format('YYYYMMDDHHmmss');
     //3、将新的status压入现状status部分
-    //! 请注意，由于旧的现状在上一次的同等操作中已经压入了历史，所以此时不需要再次压入历史
+    //! 请注意，由于旧的现状在上一次的同等操作中已经压入了历史，所以此时已存在的status不需要再次压入历史
     progress_content.status = new_status;
     //4、将新的status压入历史
     //! 请注意，每一个现状都要压入历史，因为查询历史数据的时候必须是包含现状的    
@@ -81,9 +85,11 @@ case_progress_model.update_progress_nosave_hasreturn = function (progress, node_
     //7、返回progress
     return progress;
 };
+
+//通过new_status和user_id制作一个新的只有第一条历史记录的content
 case_progress_model.create_new_progress_content = function (new_status, user_id) {
     //定义全局的progress里面的content的数据格式(已经在本函数里定义过)
-    var content =JSON.parse( new case_progress_model().content);
+    var content = JSON.parse(new case_progress_model().content);
     //在returnjson里面添加两项历史变量
     new_status.user_id = user_id;
     new_status.time = moment().format('YYYYMMDDHHmmss');
@@ -95,7 +101,20 @@ case_progress_model.create_new_progress_content = function (new_status, user_id)
     return content;
 };
 
+case_progress_model.find_progress_list_by_case_id = function (case_id, next) {
+    var em = new easy_mysql('case_progress');
+    em.where('CASE_ID="' + case_id + '"').find(function (data) {
+        if (data == null) { throw new Error('查找progress报错'); }
+        next(data);
+    });
+};
 
-
+case_progress_model.find_progress_list_by_case_node_id = function (case_node_id, next) {
+    var em = new easy_mysql('case_progress');
+    em.where('NODE_ID="' + case_node_id + '"').find(function (data) {
+        if (data == null) { throw new Error('查找progress报错'); }
+        next(data);
+    });
+};
 
 module.exports = case_progress_model;

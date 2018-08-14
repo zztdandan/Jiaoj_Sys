@@ -8,6 +8,7 @@ var ftp_client = require('./ftp_client');
 var randomword = require(path.join(process.cwd(), 'logic', 'randomword'));
 var moment = require('moment');
 var file_manager_model = require(path.join(process.cwd(), 'model', 'file_manager_model'));
+const csexception = require(path.join(process.cwd(), 'logic', 'csexception'));
 
 //上传处理
 //约定上传格式为一个form，该form必须有这个定义：enctype='multipart/form-data'，
@@ -46,7 +47,8 @@ router.post('/uploadpic', function (req, res, next) {
         var fileExt = tmpfilePath.substring(tmpfilePath.lastIndexOf('.'));
         if (('.jpg.jpeg.png.gif').indexOf(fileExt.toLowerCase()) === -1) {
             err = new Error('此文件类型不允许上传');
-            res.json({ code: -1, message: '此文件类型不允许上传' });
+           
+            res.json( new csexception(false,'此文件类型不允许上传',{}));
         }
         else {
             fileExt1 = fileExt.substring(1);
@@ -91,7 +93,8 @@ router.post('/uploadpic', function (req, res, next) {
             });
             //回传rec_id到post回执
             file_manager_model.additem(file_manager, function (id) {
-                res.json({ 'id': file_manager.REC_ID,'path':'/file_manager/load?id='+ file_manager.REC_ID });
+                var k={ 'id': file_manager.REC_ID,'path':'/file_manager/load?id='+ file_manager.REC_ID };
+                res.json(new csexception(true,'suc',k));
             });
 
 
