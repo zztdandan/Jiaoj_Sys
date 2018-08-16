@@ -38,17 +38,17 @@ app.set('views', path.join(__dirname, ''));
 
 
 //这个方法使得所有错误都不会crash，保证运行环境程序正确运行
-app.use(function (req, res, next) {
-	var reqDomain = domain.create();
-	reqDomain.on('error', function (err) {  // 下面抛出的异常在这里被捕获,触发此事件
-		console.log(err);
-		res.render('views/error.ejs', { 'errMsg': err.message, 'stat': err.status });           // 成功给用户返回了 500
-	});
-	reqDomain.run(next);
-});
+// app.use(function (req, res, next) {
+// 	var reqDomain = domain.create();
+// 	reqDomain.on('error', function (err) {  // 下面抛出的异常在这里被捕获,触发此事件
+// 		console.log(err);
+// 		res.render('views/error.ejs', { 'errMsg': err.message, 'stat': err.status });           // 成功给用户返回了 500
+// 	});
+// 	reqDomain.run(next);
+// });
 
 //* 用routes/index.js分包路由
-var routes = require(path.join(__dirname, 'routes', 'index'));
+var routes = require(path.join(process.cwd(), 'routes', 'index'));
 routes(app);
 //链接sql
 

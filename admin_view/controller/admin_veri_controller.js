@@ -161,6 +161,7 @@ router.get('/progress_next_node', function (req, res, next) {
     });
 });
 
+//获得节点历史
 router.get('/case_progress_history',function(req, res, next){
     var case_progress_id = req.query.case_progress_id;
     case_progress_model.find_case_progress_by_id(case_progress_id, function (case_progress) {
