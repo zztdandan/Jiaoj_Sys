@@ -3,9 +3,7 @@ var config = require('../config');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 exports.assetsPath = function (_path) {
-    var assetsSubDirectory = process.env.NODE_ENV === 'production' ?
-        config.build.assetsSubDirectory :
-        config.dev.assetsSubDirectory;
+    var assetsSubDirectory = config.build.assetsSubDirectory ;
     return path.posix.join(assetsSubDirectory, _path);
 };
 
@@ -102,7 +100,7 @@ exports.htmlPlugin = function () {
         let filename = filePath.substring(filePath.lastIndexOf('\/') + 1, filePath.lastIndexOf('.'));
         let conf = {
             // 模板来源
-            template: filePath,
+            template:filePath,
             // 文件名称
             filename: filename + '.html',
             // 页面模板需要加对应的js脚本，如果不加这行则每个页面都会引入所有的js脚本

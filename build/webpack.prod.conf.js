@@ -21,8 +21,8 @@ var webpackConfig = merge(baseWebpackConfig, {
   devtool: config.build.productionSourceMap ? '#source-map' : false,
   output: {
     path: config.build.assetsRoot,
-    filename: utils.assetsPath('js/[name].[chunkhash].js'),
-    chunkFilename: utils.assetsPath('js/[id].[chunkhash].js')
+    filename: utils.assetsPath('[name]/js/[name].[chunkhash].js'),
+    chunkFilename: utils.assetsPath('[name]/js/[id].[chunkhash].js')
   },
   plugins: [
     // http://vuejs.github.io/vue-loader/en/workflow/production.html
@@ -37,7 +37,7 @@ var webpackConfig = merge(baseWebpackConfig, {
     }),
     // extract css into its own file
     new ExtractTextPlugin({
-      filename: utils.assetsPath('css/[name].[contenthash].css')
+      filename: utils.assetsPath('[name]/css/[name].[contenthash].css')
     }),
     // Compress extracted CSS. We are using this plugin so that possible
     // duplicated CSS from different components can be deduped.
@@ -51,7 +51,7 @@ var webpackConfig = merge(baseWebpackConfig, {
     // see https://github.com/ampedandwired/html-webpack-plugin
     // new HtmlWebpackPlugin({
     //   filename: config.build.index,
-    //   template: 'index.html',
+    //   template: '[name].html',
     //   inject: true,
     //   minify: {
     //     removeComments: true,
@@ -60,7 +60,7 @@ var webpackConfig = merge(baseWebpackConfig, {
     //     // more options:
     //     // https://github.com/kangax/html-minifier#options-quick-reference
     //   },
-    //   // necessary to consistently work with multiple chunks via CommonsChunkPlugin
+      // necessary to consistently work with multiple chunks via CommonsChunkPlugin
     //   chunksSortMode: 'dependency'
     // }),
     // split vendor js into its own file
@@ -86,7 +86,7 @@ var webpackConfig = merge(baseWebpackConfig, {
     // copy custom static assets
     new CopyWebpackPlugin([{
       from: path.resolve(__dirname, '../static'),
-      to: config.build.assetsSubDirectory,
+      to: '../tmp',
       ignore: ['.*']
     }])
   ].concat(utils.htmlPlugin())

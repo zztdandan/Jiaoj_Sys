@@ -1,16 +1,13 @@
-require('./check-versions')();
+// require('./check-versions')();
 
-var config = require('../config');
-if (!process.env.NODE_ENV) {
-  process.env.NODE_ENV = JSON.parse(config.dev.env.NODE_ENV);
-}
-
+var debug = require('debug')('jiaoj-node:server');
+var http = require('http');
 var opn = require('opn');
 var path = require('path');
 var express = require('express');
 var webpack = require('webpack');
 var proxyMiddleware = require('http-proxy-middleware');
-var webpackConfig = require('./webpack.dev.conf');
+var webpackConfig = require('./webpack.prod.conf');
 //*设置引用
 var domain = require('domain');
 var createError = require('http-errors');
@@ -18,22 +15,30 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var logger = require('morgan');
 var ejs = require('ejs');
-
+var config = require('../config');
 
 // default port where dev server listens for incoming traffic
-var port = config.dev.port;//8080
+var port = config.dev.port; //3000
 // automatically open browser, if not set will be false
-var autoOpenBrowser =true;
+var autoOpenBrowser = true;
 // Define HTTP proxies to your custom API backend
 // https://github.com/chimurai/http-proxy-middleware
 var proxyTable = config.dev.proxyTable;
 
 var app = express();
+app.set('port', port);
+//设定全局视图解析引擎
+//设定views目录为全局，调用views将从根目录开始写路径
+app.set('views', path.join(process.cwd(), 'views'));
+
+//让html调用ejs引擎（等于html可以写ejs）
+app.engine('html', ejs.__express);
+
 var compiler = webpack(webpackConfig);
 
 var devMiddleware = require('webpack-dev-middleware')(compiler, {
   publicPath: webpackConfig.output.publicPath,
-  lazy:false,
+  lazy: false,
   stats: {
     colors: true,
     chunks: false
@@ -41,12 +46,13 @@ var devMiddleware = require('webpack-dev-middleware')(compiler, {
 });
 
 var hotMiddleware = require('webpack-hot-middleware')(compiler, {
-  log: console.log, path: '/__webpack_hmr', heartbeat: 10 * 1000,
+  log: console.log,
+  path: '/__webpack_hmr',
+  heartbeat: 10 * 1000
 });
 
-
 // serve webpack bundle output
-app.use(devMiddleware);
+// app.use(devMiddleware);
 
 // enable hot-reload and state-preserving
 // compilation error display
@@ -70,36 +76,26 @@ app.use(hotMiddleware);
 
 // handle fallback for HTML5 history API
 
-
-//设定全局视图解析引擎
-//让html调用ejs引擎（等于html可以写ejs）
-app.engine('html', ejs.__express);
-//设定views目录为全局，调用views将从根目录开始写路径
-app.set('views', path.join(__dirname, ''));
-
-
 // serve pure static assets
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 // app.use(.bodyParser({uploadDir:'./tmp'}));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(process.cwd(), 'views')));
 
-app.use(function (req, res, next) {
-	res.header('Access-Control-Allow-Origin', '*');
-	res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-	next();
+app.use(function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept'
+  );
+  next();
 });
-
 
 var routes = require(path.join(process.cwd(), 'routes', 'index'));
 routes(app);
 
-
-
 app.use(require('connect-history-api-fallback')());
-
-
 
 // app.use(function (err, req, res, next) {
 // 	// set locals, only providing error in development
@@ -119,24 +115,21 @@ var readyPromise = new Promise(resolve => {
   _resolve = resolve;
 });
 
-process.on('uncaughtException', function (err) {
+process.on('uncaughtException', function(err) {
+  //所以这里的回调你不要妄想太多,打算打印一下错误信息还是可以的
+  console.error('uncaughtException ERROR');
+  if (typeof err === 'object') {
+    if (err.message) {
+      console.error('ERROR: ' + err.message);
+    }
+    if (err.stack) {
+      console.error(err.stack);
+    }
+  } else {
+    console.error('argument is not an object');
+  }
 
-	//所以这里的回调你不要妄想太多,打算打印一下错误信息还是可以的 
-	console.error('uncaughtException ERROR');
-	if (typeof err === 'object') {
-		if (err.message) {
-			console.error('ERROR: ' + err.message);
-		}
-		if (err.stack) {
-			console.error(err.stack);
-		}
-	} else {
-		console.error('argument is not an object');
-	}
-
-
-	//然后你还可以做一些手脚,优雅的退出
-
+  //然后你还可以做一些手脚,优雅的退出
 });
 console.log('> Starting dev server...');
 devMiddleware.waitUntilValid(() => {
@@ -148,7 +141,50 @@ devMiddleware.waitUntilValid(() => {
   _resolve();
 });
 
-var server = app.listen(port);
+// var server = app.listen(port);
+
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+
+function onError(error) {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
+
+  var bind = typeof port === 'string' ? 'Pipe ' + port : 'Port ' + port;
+
+  // handle specific listen errors with friendly messages
+  switch (error.code) {
+    case 'EACCES':
+      console.error(bind + ' requires elevated privileges');
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      console.error(bind + ' is already in use');
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+
+function onListening() {
+  var addr = server.address();
+  var bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
+  debug('Listening on ' + bind);
+}
+
+var server = http.createServer(app);
+
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);
 
 module.exports = {
   ready: readyPromise,

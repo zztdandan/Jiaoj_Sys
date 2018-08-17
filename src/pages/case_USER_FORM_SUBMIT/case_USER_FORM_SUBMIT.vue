@@ -12,7 +12,7 @@
 </template>
 
 <script>
-  import $ from "jquery";
+
   import jqueryform from "jquery-form";
   var path = require("path");
   const UserSubmitFormComp = require(path.join(__dirname,));

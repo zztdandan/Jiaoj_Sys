@@ -1,0 +1,116 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+
+var app1 = require('../build/dev-server-modi');
+var app = app1.app;
+var readyPromise = app1.ready;
+var debug = require('debug')('jiaoj-node:server');
+var http = require('http');
+
+//* 设置字段以function(){return}返回的方式运行，根据不同情况返回不同字段即可
+
+//* 设置全局字段的值，本地开发为development
+
+/**
+ * Get port from environment and store in Express.
+ */
+var port = normalizePort(3000);
+app.set('port', port);
+
+/**
+ * Create HTTP server.
+ */
+
+var server = http.createServer(app);
+
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);
+
+/**
+ * Normalize a port into a number, string, or false.
+ */
+
+function normalizePort(val) {
+  var port = parseInt(val, 10);
+
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+
+  return false;
+}
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+
+function onError(error) {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
+
+  var bind = typeof port === 'string' ? 'Pipe ' + port : 'Port ' + port;
+
+  // handle specific listen errors with friendly messages
+  switch (error.code) {
+    case 'EACCES':
+      console.error(bind + ' requires elevated privileges');
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      console.error(bind + ' is already in use');
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+
+function onListening() {
+  var addr = server.address();
+  var bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
+  debug('Listening on ' + bind);
+}
+
+//为了程序不跳出，此处捕获所有未捕获回调，并打出log
+process.on('uncaughtException', function(err) {
+  //所以这里的回调你不要妄想太多,打算打印一下错误信息还是可以的
+  console.error('uncaughtException ERROR');
+  if (typeof err === 'object') {
+    if (err.message) {
+      console.error('ERROR: ' + err.message);
+    }
+    if (err.stack) {
+      console.error(err.stack);
+    }
+  } else {
+    console.error('argument is not an object');
+  }
+
+  //然后你还可以做一些手脚,优雅的退出
+});
+
+module.exports = {
+  ready: readyPromise,
+  close: () => {
+    server.close();
+  }
+};

@@ -16,7 +16,7 @@ router.get('/', function (req, res, next) {
 
     user_menu.read_user_menu(function (menuList) {
         console.log('首页controller');
-        res.render('menu/view/menu_app.ejs');
+        res.render('case_USER_FORM_SUBMIT.html');
     });
 });
 //首页end

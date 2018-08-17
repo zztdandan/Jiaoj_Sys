@@ -20,7 +20,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 // app.use(.bodyParser({uploadDir:'./tmp'}));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'views')));
 
 //在express里面允许所有请求
 // 允许所有的请求形式 
@@ -34,7 +34,7 @@ app.use(function (req, res, next) {
 //让html调用ejs引擎（等于html可以写ejs）
 app.engine('html', ejs.__express);
 //设定views目录为全局，调用views将从根目录开始写路径
-app.set('views', path.join(__dirname, ''));
+app.set('views', path.join(__dirname, 'views'));
 
 
 //这个方法使得所有错误都不会crash，保证运行环境程序正确运行
