@@ -17,7 +17,7 @@ router.get('/', function (req, res, next) {
     user_menu.read_user_menu(function (menuList) {
         console.log('首页controller');
         // res.render('/index1.html');
-        res.redirect('/index1.html');
+        res.redirect('/menu_app.html');
     });
 });
 //首页end

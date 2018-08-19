@@ -91,7 +91,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 // app.use(.bodyParser({uploadDir:'./tmp'}));
 app.use(cookieParser());
-app.use(express.static(path.join(process.cwd(), 'src')));
+app.use(express.static(path.join(process.cwd(), 'static')));
 
 //在express里面允许所有请求
 // 允许所有的请求形式 
