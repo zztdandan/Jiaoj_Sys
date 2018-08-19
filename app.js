@@ -5,6 +5,15 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var logger = require('morgan');
 var ejs = require('ejs');
+var config = require('./config');
+var webpack = require('webpack')
+var proxyMiddleware = require('http-proxy-middleware')
+var webpackConfig = require('./webpack.dev.conf')
+
+if (!process.env.NODE_ENV) {
+	process.env.NODE_ENV = JSON.parse(config.dev.env.NODE_ENV)
+  }
+  
 
 //using express
 var express = require('express');
