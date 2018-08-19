@@ -8,141 +8,25 @@
     <meta name="viewport" content="initial-scale=1, maximum-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <script src="/js/jquery-1.8.0.min.js"></script>
-    <script src="/js/vue.js"></script>
-
-
-    <!-- <link href="/css/bootstrap.min.css" type="text/css" rel="stylesheet" charset=“utf-8”>
-    <script src="/js/bootstrap.min.js"></script> -->
-
-    <!-- <link href="/css/sm.min.css" type="text/css" rel="stylesheet" charset=“utf-8”>
-   
-    <script src="/js/zepto.min.js"></script>
-    <script src="/js/sm.min.js"></script>
-    <link href="/css/menu_css.css" type="text/css" rel="stylesheet" charset=“utf-8”> -->
-
-    <link rel="stylesheet" href="/light7/dist/css/light7.css" type="text/css" charset=“utf-8”>
-    <script type='text/javascript' src='/light7/dist/js/light7.min.js' charset='utf-8'></script>
-    <link rel="stylesheet" href="/light7/dist/css/light7-swiper.min.css" type="text/css" charset=“utf-8”>
-    <script type='text/javascript' src='/light7/dist/js/light7-swiper.min.js' charset='utf-8'></script>
-    <link rel="stylesheet" href="/iconfonts/iconfont.css" type="text/css">
-    <link rel="stylesheet" href="/css/buttons.css" type="text/css">
-    <link rel="stylesheet" href="/css/bs_col.css" type="text/css">
-    <style>
-        .menu-icon {
-            display: inline-block;
-            text-align: center;
-            color: blue;
-        }
-
-        .case-item-title {
-            display: block;
-        }
-
-        .new-btn {
-            margin-bottom: 1em
-        }
-
-        /* .col-xs-4{
-            padding-left: 5px;
-            padding-right: 5px;
-        } */
-    </style>
+ 
 
 </head>
 
 <body>
 
-
-
-    <!-- 首页 -->
-    <div class="page">
-        <!-- 页头页脚 -->
-        <div id="vuecontent">
-            <simple-header ti="柳州交警"></simple-header>
-            <simple-footer></simple-footer>
-            <div class="content">
-                <image-block :imgurl='imgurl'></image-block>
-                <div class="content-block">
-                    <!-- 警示区域 -->
-                    <!-- <warning-block :warninglist='warninglist'></warning-block> -->
-                    <!-- 业务按钮模块 -->
-                    <case-menu-block :menuindex='caseindex'></case-menu-block>
-                </div>
-            </div>
-        </div>
-    </div>
+如果看到这行字，表示后台链接成功。可以测试一下几个api：
+/user_menu/
+/user_menu/dic
+(post)/login  (phone_num,req.body.pwd)
 
 </body>
 <script>
 
-    jQuery(function () {
-
-        ShowWarning();
-        ReadUserMenu();
-    });
-
-    function relocation(url) {
-        this.location = url;
-    }
 </script>
 <script>
-    //显示警告
-    function ShowWarning() {
-        $.ajax({
-            type: "get",
-            url: '/user_warning_info',
 
-
-            success: function (data) {
-                if (data != null) {
-                    data.forEach(function (a) {
-                        k.warninglist.push(a);
-                    });
-                }
-            },
-            error: function (data) {
-                alert("操作出现错误" + data);
-            }
-        });
-    }
-    function ReadUserMenu() {
-        $.ajax({
-            type: "get",
-            url: '/user_menu',
-            success: function (data) {
-                if (data != null) {
-                    data.forEach(function (index_alone) {
-                        k.caseindex.push(index_alone);
-                    });
-                }
-            },
-            error: function (data) {
-                alert("操作出现错误" + data);
-            }
-        });
-    }
 </script>
-<!-- vue代码 -->
-<!-- 标题页脚 -->
-<script src="/component/simple_header.js"></script>
-<script src="/component/homepage_comp.js"></script>
-<script>
 
-    var k = new Vue({
-        el: '#vuecontent',
-        components: {
-            'image-block': ImageBlock,
-            'case-menu-block': CaseMenuBlock
-        },
-        data: function () {
-            return {
-                warninglist: [],
-                imgurl: ['/img/pic1.png', '/img/pic2.jpg', '/img/pic3.jpg'],
-                caseindex: []
-            }
-        }
-    });
 </script>
 
 </html>

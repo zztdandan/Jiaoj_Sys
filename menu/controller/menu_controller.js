@@ -5,6 +5,8 @@ var user_menu_model = require(path.join(process.cwd(), 'menu', 'model', 'user_me
 const csexception = require(path.join(process.cwd(), 'logic', 'csexception'));
 
 
+
+//获得menulist
 router.get('/', function (req, res, next) {
     user_menu_model.read_user_menu(function (menuList) {
         console.log('menu_controller');
@@ -14,6 +16,9 @@ router.get('/', function (req, res, next) {
 
 
 });
+
+
+//获得业务大类的ntext，在code_desc，由于有多项，所以是直接输出list的。在前台是直接读取dic+list[i].CODE_DESC
 router.get('/dic', function (req, res, next) {
     user_menu_model.read_user_menu_dic(function (dic_list) {
         // console.log('menu_controller');
