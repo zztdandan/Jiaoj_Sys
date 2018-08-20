@@ -14,7 +14,10 @@ router.get('/', function (req, res, next) {
 
 
 });
+
+
 router.get('/dic', function (req, res, next) {
+    //获得所有业务大类列表
     user_menu_model.read_user_menu_dic(function (dic_list) {
         // console.log('menu_controller');
   

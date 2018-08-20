@@ -9,7 +9,7 @@ var data_dic_model=function(){};
 data_dic_model.find_list_by_cname=function(c_name,next){
     var em = new easy_mysql('data_dic');
     try{
-        em.where('CODE_CLASS_CNAME= \''+c_name+'\'').find(function(data){
+        em.where('CODE_CLASS_CNAME= \''+c_name+'\'').select(function(data){
 
             next(data);
         });
@@ -23,7 +23,7 @@ data_dic_model.find_list_by_cname=function(c_name,next){
 data_dic_model.find_list_by_code_class=function(code_class,next){
     var em = new easy_mysql('data_dic');
     try{
-        em.where('CODE_CLASS= \''+code_class+'\'').find(function(data){
+        em.where('CODE_CLASS= \''+code_class+'\'').select(function(data){
 
             next(data);
         });
