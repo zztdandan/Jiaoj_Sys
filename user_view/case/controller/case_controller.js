@@ -10,32 +10,28 @@ var user_info_model = require(path.join(process.cwd(), 'menu', 'model', 'user_in
 var case_node_type_model = require(path.join(process.cwd(), 'user_view', 'case', 'model', 'case_node_type_model'));
 
 
-router.get('/', function (req, res, _next) {
-	console.log('case_controller');
-	//该流程的流程id
-	var node_id = req.query.node_id;
+// router.get('/', function (req, res, _next) {
+// 	console.log('case_controller');
+// 	//该流程的流程id
+// 	var node_id = req.query.node_id;
 
-	case_node_model.read_node_by_id(node_id, function (node) {
-		//读取node_type获取渲染页面地址
-		case_node_type_model.get_type_by_name(node_id.node_type, function (node_type) {
-			console.log(node_type);
-			res.render(node_type.RENDER_URL);
-		});
-	});
-});
+// 	case_node_model.read_node_by_id(node_id, function (node) {
+// 		//读取node_type获取渲染页面地址
+// 		case_node_type_model.get_type_by_name(node_id.node_type, function (node_type) {
+// 			console.log(node_type);
+// 			res.render(node_type.RENDER_URL);
+// 		});
+// 	});
+// });
 
 
+//获得该节点的详细信息，直接获得detail
 router.get('/node_detail', function (req, res, _next) {
 	var case_node_id = req.query.case_node_id;
 	case_node_model.read_node_by_id(case_node_id, function (node) {
-		var res_json = JSON.parse(node.node_detail);
-		if (typeof req.query.detail_name != 'undefined') {
-			res_json = res_json[req.query.detail_name];
-		}
-		res.json(res_json);
+		var res_json = JSON.parse(node.node_detail);	
+		res.json(new csexception(true,'suc',res_json));
 	});
-
-
 });
 //user_form_submit上传controller
 router.post('/user_form_submit', function (req, res, _next) {
