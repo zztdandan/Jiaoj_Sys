@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const path = require('path');
-const fromdata = require('formidable');
+const formdata = require('formidable');
 const moment = require('moment');
 const case_node_model = require(path.join(process.cwd(), 'user_view', 'case', 'model', 'case_node_model'));
 const case_progress_model = require(path.join(process.cwd(), 'user_view', 'case', 'model', 'case_progress_model'));
@@ -35,7 +35,7 @@ router.get('/node_detail', function (req, res, _next) {
 });
 //user_form_submit上传controller
 router.post('/user_form_submit', function (req, res, _next) {
-	var form = new fromdata.IncomingForm();
+	var form = new formdata.IncomingForm();
 	form.uploadDir = './tmp';
 	form.keepExtensions = true;
 	//转化为formidable后的处理办法

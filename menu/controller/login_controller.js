@@ -3,6 +3,7 @@ var router = express.Router();
 var path = require('path');
 var bodyParser = require('body-parser');
 var user_info_model = require('../model/user_info_model');
+var formdata = require('formidable');
 var cookieparser = require('cookie-parser');
 const csexception = require(path.join(process.cwd(), 'logic', 'csexception'));
 //get=登陆页面
@@ -38,9 +39,19 @@ router.get('/', function(req, res, next) {
 //post=登陆信息发送
 
 router.post('/', function(req, res, next) {
+  var form = new formdata.IncomingForm();
+  form.uploadDir = './tmp';
+  form.maxFieldsSize = 1024 * 1024;//文件大小限制在1mb
+  form.keepExtensions = true;
+  form.parse(req, function (err, fields, file) {
+    if (err) {
+        err.status = 414;
+        err.message = '上传功能出错';
+        throw err;
+    }
   user_info_model.check_and_login_user(
-    req.body.phone_num,
-    req.body.pwd,
+    fields.phone_num,
+    fields.pwd,
     function(bol, token) {
       if (bol) {
         res.cookie('token', token, { maxAge: 59 * 60 * 24 * 1000 }); //注册时间为23小时59分
@@ -52,7 +63,7 @@ router.post('/', function(req, res, next) {
       }
     }
   );
-
+  });
   // res.render('menu/view/login.ejs');
 });
 

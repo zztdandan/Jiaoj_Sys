@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var path = require('path');
-var fromdata = require('formidable');
+var formdata = require('formidable');
 var util = require('util');
 var fs = require('fs');
 var ftp_client = require('./ftp_client');
@@ -14,7 +14,7 @@ const csexception = require(path.join(process.cwd(), 'logic', 'csexception'));
 //约定上传格式为一个form，该form必须有这个定义：enctype='multipart/form-data'，
 //一般情况下，form会包含一个图片文件（有且仅有第一个才会被上传），而且包含一个type字段标明该图片所属
 router.post('/uploadpic', function (req, res, next) {
-    var form = new fromdata.IncomingForm();
+    var form = new formdata.IncomingForm();
     form.uploadDir = './tmp';
     form.maxFieldsSize = 1024 * 1024;//文件大小限制在1mb
     form.keepExtensions = true;
