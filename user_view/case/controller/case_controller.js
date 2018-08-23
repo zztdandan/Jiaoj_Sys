@@ -2,12 +2,12 @@ const express = require('express');
 const router = express.Router();
 const path = require('path');
 const formdata = require('formidable');
-const moment = require('moment');
+// const moment = require('moment');
 const case_node_model = require(path.join(process.cwd(), 'user_view', 'case', 'model', 'case_node_model'));
 const case_progress_model = require(path.join(process.cwd(), 'user_view', 'case', 'model', 'case_progress_model'));
 const csexception = require(path.join(process.cwd(), 'logic', 'csexception'));
 var user_info_model = require(path.join(process.cwd(), 'menu', 'model', 'user_info_model'));
-var case_node_type_model = require(path.join(process.cwd(), 'user_view', 'case', 'model', 'case_node_type_model'));
+// var case_node_type_model = require(path.join(process.cwd(), 'user_view', 'case', 'model', 'case_node_type_model'));
 
 
 // router.get('/', function (req, res, _next) {
@@ -137,11 +137,24 @@ router.get('/progress_next_node', function (req, res, next) {
         res.json(new csexception(true,'success',data));
     });
 });
+router.get('/node_info', function (req, res, _next) {
+	var case_node_id = req.query.case_node_id;
+	case_node_model.read_node_by_id(case_node_id, function (node) {	
+		res.json(new csexception(true,'suc',node));
+	});
+});
 router.get('/case_progress_history',function(req, res, next){
     var case_progress_id = req.query.case_progress_id;
     case_progress_model.find_case_progress_by_id(case_progress_id, function (case_progress) {
         var res_json = JSON.parse(case_progress.content);
         res.json(new csexception(true, 'success', res_json.history));
+    });
+});
+router.get('/case_progress',function(req, res, next){
+    var case_progress_id = req.query.case_progress_id;
+    case_progress_model.find_case_progress_by_id(case_progress_id, function (case_progress) {
+        
+        res.json(new csexception(true, 'success', case_progress_id));
     });
 });
 module.exports = router;
