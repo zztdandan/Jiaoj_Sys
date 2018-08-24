@@ -52,14 +52,16 @@ case_progress_model.update_case_progress = function (progress_rec_id, progress_n
     var em = new easy_mysql('case_progress');
 
     em.where('REC_ID="' + progress_rec_id + '"').find(function (progress_data) {
+        
         progress_data.NODE_ID = progress_node;
         if (typeof progress_content == 'object') {
             progress_content = JSON.stringify(progress_content);
         }
         progress_data.CONTENT = progress_content;
         progress_data.LAST_TIME = moment().format('YYYYMMDDHHmmss');
+        let res=progress_data;
         em.where('REC_ID="' + progress_rec_id + '"').save(progress_data, function (rows) {
-            next(rows);
+            next(res);
         });
     });
 };

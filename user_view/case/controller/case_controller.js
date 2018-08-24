@@ -87,12 +87,12 @@ router.post('/user_form_submit', function(req, res, _next) {
                 new_progress.REC_ID,
                 next_node.rec_id,
                 JSON.stringify(content),
-                function(rows) {
-                  if (rows == 0) {
+                function(re) {
+                  if (typeof re=='undefined') {
                     throw new Error('没有更新数据');
                   }
                   // 更新完成，回传json
-                  res.json(new csexception(true,'数据录入成功',new_progress));
+                  res.json(new csexception(true,'数据录入成功',re));
                 }
               );
             });
