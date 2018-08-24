@@ -14,10 +14,11 @@ const csexception = require(path.join(process.cwd(), 'logic', 'csexception'));
 //首页controller
 router.get('/', function (req, res, next) {
 
-    user_menu.read_user_menu(function (menuList) {
-        console.log('首页controller');
-        res.render('menu/view/menu_app.ejs');
-    });
+    // user_menu.read_user_menu(function (menuList) {
+    //     console.log('首页controller');
+    //     res.render('menu/view/menu_app.ejs');
+    // });
+    res.send('api运行正常');
 });
 //首页end
 

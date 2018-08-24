@@ -96,7 +96,7 @@ case_progress_model.create_new_progress_content = function (new_status, user_id)
     //! returnjson压入现状，同时压入历史
     //! 请注意，每一个现状都要压入历史，因为查询历史数据的时候必须是包含现状的
     content.status = new_status;
-    content.history.push(new_status);
+    // content.history.push(new_status);
     content.history.push(content.status);
     return content;
 };
