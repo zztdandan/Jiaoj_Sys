@@ -4,6 +4,7 @@ const path = require('path');
 const formdata = require('formidable');
 // const moment = require('moment');
 const case_node_model = require(path.join(process.cwd(), 'user_view', 'case', 'model', 'case_node_model'));
+const case_index_model = require(path.join(process.cwd(), 'user_view', 'case', 'model', 'case_index_model'));
 const case_progress_model = require(path.join(process.cwd(), 'user_view', 'case', 'model', 'case_progress_model'));
 const csexception = require(path.join(process.cwd(), 'logic', 'csexception'));
 var user_info_model = require(path.join(process.cwd(), 'menu', 'model', 'user_info_model'));
@@ -62,7 +63,7 @@ router.post('/user_form_submit', function(req, res, _next) {
 
       //cookie读取用户
       if (typeof req.cookies.token == 'undefined') {
-        res.json(new csexception(false,'失去登陆信息',{}));
+        res.json(new csexception(false, '失去登陆信息', {}));
         return;
       }
       user_info_model.get_user_by_token(req.cookies.token, function(user_json) {
@@ -88,11 +89,11 @@ router.post('/user_form_submit', function(req, res, _next) {
                 next_node.rec_id,
                 JSON.stringify(content),
                 function(re) {
-                  if (typeof re=='undefined') {
+                  if (typeof re == 'undefined') {
                     throw new Error('没有更新数据');
                   }
                   // 更新完成，回传json
-                  res.json(new csexception(true,'数据录入成功',re));
+                  res.json(new csexception(true, '数据录入成功', re));
                 }
               );
             });
@@ -170,7 +171,18 @@ router.get('/case_progress_history', function(req, res, next) {
 router.get('/case_progress', function(req, res, next) {
   var case_progress_id = req.query.case_progress_id;
   case_progress_model.find_case_progress_by_id(case_progress_id, function(case_progress) {
-    res.json(new csexception(true, 'success', case_progress_id));
+    res.json(new csexception(true, 'success', case_progress));
   });
+});
+router.get('/case_info', function(req, res, next) {
+  var case_id = req.query.case_id;
+  case_index_model
+    .get_case_info_all_pro(case_id)
+    .then(function(case_data) {
+      res.json(new csexception(true, 'success', case_data));
+    })
+    .catch(function(err) {
+      console.log('case_index_model.get_case_info_all', err);
+    });
 });
 module.exports = router;

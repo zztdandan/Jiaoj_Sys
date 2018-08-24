@@ -3,19 +3,19 @@ var path = require('path');
 var crypto = require(path.join(process.cwd(), 'menu', 'logic', 'crypto'));
 
 var token=function(){}
- token.token_decrypto=function(crypto, req, next, res) {
-    crypto.decipher(crypto.algorithm, crypto.key, req.cookies.token, function (decrypted) {
-        var user_info_json = JSON.parse(decrypted);
-        var that_time = user_info_json.time;
-        var this_time = new Date().getTime();
-        if (that_time >= this_time) {
-            next();
-        }
-        else {
-            res.redirect('/login');
-        }
-    });
-}
+//  token.token_decrypto=function(crypto, req, next, res) {
+//     crypto.decipher(crypto.algorithm, crypto.key, req.cookies.token, function (decrypted) {
+//         var user_info_json = JSON.parse(decrypted);
+//         var that_time = user_info_json.time;
+//         var this_time = new Date().getTime();
+//         if (that_time >= this_time) {
+//             next();
+//         }
+//         else {
+//             res.redirect('/login');
+//         }
+//     });
+// }
 
 
 //token加密
