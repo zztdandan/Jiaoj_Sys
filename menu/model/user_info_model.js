@@ -18,7 +18,7 @@ user_info_model.read_user_info = function(req, res, next) {
 };
 user_info_model.check_user_login = function(phone, pwd, next) {
   var em = new easy_mysql('foriegn_user');
-  var sql = "select * from foriegn_user where FORIEGN_PHONENUM= '" + phone + "' and PWD= '" + pwd + "'";
+  var sql = 'select * from foriegn_user where FORIEGN_PHONENUM= \'' + phone + '\' and PWD= \'' + pwd + '\'';
   em.query(sql, function(err, rows) {
     if (err) {
       throw err;
@@ -92,5 +92,21 @@ user_info_model.read_user_info_pro = function(user_rec_id,next) {
     });
   
 };
+
+//从token中取出user_info结构体
+user_info_model.get_user_by_token_pro = function(token) {
+
+  return new Promise(function(resolve,reject){
+
+    var b = new Object();
+    crypto.decipher(crypto.algorithm, crypto.key, token, function(decrypted) {
+      b.decrypted = decrypted;
+      var user_info_json = JSON.parse(b.decrypted);
+      resolve(user_info_json);
+    });
+  });
+  
+};
+
 
 module.exports = user_info_model;

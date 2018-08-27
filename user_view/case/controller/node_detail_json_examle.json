@@ -1,0 +1,22 @@
+{
+    "Return_json": {
+      "form": [
+        {
+          "label": "节点ID",
+          "id": "case_node_id",
+          "value": ""
+        },
+        {
+          "label": "用户ID",
+          "id": "user_id",
+          "value": ""
+        },
+        {
+          "label": "签名图片（canvas）地址",
+          "id": "sign_url",
+          "value": ""
+        }
+      ]
+    }
+  }
+  
