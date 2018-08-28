@@ -41,18 +41,15 @@ router.get('/', function(req, res, next) {
 router.post('/', function(req, res, next) {
   var form = new formdata.IncomingForm();
   form.uploadDir = './tmp';
-  form.maxFieldsSize = 1024 * 1024;//文件大小限制在1mb
+  form.maxFieldsSize = 1024 * 1024; //文件大小限制在1mb
   form.keepExtensions = true;
-  form.parse(req, function (err, fields, file) {
+  form.parse(req, function(err, fields, file) {
     if (err) {
-        err.status = 414;
-        err.message = '上传功能出错';
-        throw err;
+      err.status = 414;
+      err.message = '上传功能出错';
+      throw err;
     }
-  user_info_model.check_and_login_user(
-    fields.phone_num,
-    fields.pwd,
-    function(bol, token) {
+    user_info_model.check_and_login_user(fields.phone_num, fields.pwd, function(bol, token) {
       if (bol) {
         res.cookie('token', token, { maxAge: 59 * 60 * 24 * 1000 }); //注册时间为23小时59分
 
@@ -61,10 +58,14 @@ router.post('/', function(req, res, next) {
         res.clearCookie('token');
         res.json(new csexception(false, 'suc', {}));
       }
-    }
-  );
+    });
   });
   // res.render('menu/view/login.ejs');
+});
+
+router.post('/logout', function(req, res, next) {
+  res.cookie('token', '', { expires: new Date(0) }); //使该cookie马上失效
+  res.json(new csexception(false, 'suc', {}));
 });
 
 module.exports = router;
