@@ -77,6 +77,21 @@ router.get('/case_info', function(req, res, next) {
     });
 });
 
+
+router.get('/case_progress_by_user', function(req, res, next) {
+  var user_id = req.query.user_id;
+  case_progress_model.find_progress_list_by_user_pro(user_id).then((list)=>{
+    let a=new Array();
+    list.forEach(a_progress=>{
+    let temp_progress=a_progress;
+    temp_progress.CONTENT=JSON.parse(a_progress.CONTENT); 
+    a.push(temp_progress);
+    });
+    res.json(new csexception(true, 'success', a));
+  });
+});
+
+
 //* post操作集合
 //user_form_submit上传controller
 router.post('/user_form_submit', function(req, res, _next) {
@@ -112,17 +127,16 @@ router.post('/user_form_submit', function(req, res, _next) {
         res.json(new csexception(false, '失去登陆信息', {}));
         return;
       }
-      user_info_model.get_user_by_token(req.cookies.token, function(user_json) {
+      user_info_model.get_user_by_token_pro(req.cookies.token).then( function(user_info) {
         //获得用户名
-        var user_id = user_json.userid;
-
+        var user_id = user_info.REC_ID;
         //已经获得return_json，现在根据节点不同属性做不同操作
         //?判断该node性质，如果是新节点，则新建一个case_progress，如果不是新节点，则寻找case_progress
         if (this_node.node_cate == 'start') {
           //由于是新的，所以需要新建节点再改content等
           //* 节点信息在前面已经获得过
           //使用init函数类获得结果，此时新的progress已经存入数据库
-          case_progress_model.init_new_case(this_node, user_id, function(new_progress) {
+          case_progress_model.init_new_case(this_node, user_info, function(new_progress) {
             //先获得rec_id
             //创造新的content真信息
             //content包括：history历史数组，status当前json（只用于给下一步传值）
@@ -192,7 +206,7 @@ router.post('/user_form_submit', function(req, res, _next) {
 
 
 //用户登陆信息上传
-router.post('/user_sign_up', function(req, res, _next) {
+router.post('/user_post_form', function(req, res, _next) {
   var form = new formdata.IncomingForm();
   form.uploadDir = './tmp';
   form.keepExtensions = true;
@@ -226,9 +240,9 @@ router.post('/user_sign_up', function(req, res, _next) {
         res.json(new csexception(false, '失去登陆信息', {}));
         return;
       }
-      user_info_model.get_user_by_token_pro(req.cookies.token).then(function(user_json) {
+      user_info_model.get_user_by_token_pro(req.cookies.token).then(function(user_info) {
         //获得用户名
-        var user_id = user_json.userid;
+        var user_id = user_info.REC_ID;
 
         //已经获得return_json，现在根据节点不同属性做不同操作
         //?判断该node性质，如果是新节点，则新建一个case_progress，如果不是新节点，则寻找case_progress
@@ -236,7 +250,7 @@ router.post('/user_sign_up', function(req, res, _next) {
           //由于是新的，所以需要新建节点再改content等
           //* 节点信息在前面已经获得过
           //使用init函数类获得结果，此时新的progress已经存入数据库
-          case_progress_model.init_new_case(this_node, user_id, function(new_progress) {
+          case_progress_model.init_new_case(this_node, user_info, function(new_progress) {
             //先获得rec_id
             //创造新的content真信息
             //content包括：history历史数组，status当前json（只用于给下一步传值）

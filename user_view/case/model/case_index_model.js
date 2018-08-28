@@ -33,4 +33,17 @@ case_index_model.get_case_info_all_pro = function(case_id) {
   });
 };
 
+case_index_model.get_case_info_pro = function(case_id) {
+  return new Promise(function(resolve, reject) {
+    let em = new easy_mysql('case_index');
+    try{
+      em.where('rec_id= ' + case_id).find(function(case_index_data) {
+        let case_data = case_index_data;       
+          resolve(case_data);      
+      });
+    }catch(e){
+      reject(e);
+    }    
+  });
+};
 module.exports = case_index_model;

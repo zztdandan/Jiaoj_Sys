@@ -6,7 +6,7 @@ var user_info_model = require(path.join(process.cwd(), 'menu', 'model', 'user_in
 var crypto = require(path.join(process.cwd(), 'menu', 'logic', 'crypto'));
 var csexception = require(path.join(process.cwd(), 'logic', 'csexception'));
 
-//全信息过滤器
+//读取用户信息
 router.get('/', function(req, res, next) {
   console.log('check_token');
   let a_res = res;
@@ -28,7 +28,7 @@ router.get('/', function(req, res, next) {
       if (cse.flag) {
         //! 注意回调函数特性，后面要用else包裹
         let curr_user_id = cse.data.userid;
-        user_info_model.read_user_info_pro(curr_user_id, function(user_info) {
+        user_info_model.read_user_info_pro(curr_user_id).then(function(user_info) {
           a_res.json(new csexception(true, 'has_user', user_info));
         });
       } else {

@@ -78,35 +78,34 @@ user_info_model.token_decrypto = function(token, next) {
         next(new csexception(true, 'success', user_info_json));
       }
     } catch (err) {
-      next(new csexception(false, 'decry_wrong', err));
+      next(new csexception(false, 'decrypto_wrong', err));
     }
   });
 };
 
-//Promise重构函数区
-user_info_model.read_user_info_pro = function(user_rec_id,next) {
- 
+//?Promise重构函数区
+user_info_model.read_user_info_pro = function(user_rec_id) {
+  return new Promise((resolve, reject) => {
     var em = new easy_mysql('foriegn_user');
     em.where('REC_ID= ' + user_rec_id).find(function(data) {
-      next(data);
+      resolve(data);
     });
-  
+  });
 };
 
 //从token中取出user_info结构体
 user_info_model.get_user_by_token_pro = function(token) {
-
-  return new Promise(function(resolve,reject){
-
+  return new Promise(function(resolve, reject) {
     var b = new Object();
     crypto.decipher(crypto.algorithm, crypto.key, token, function(decrypted) {
       b.decrypted = decrypted;
       var user_info_json = JSON.parse(b.decrypted);
-      resolve(user_info_json);
+      user_info_model.read_user_info_pro(user_info_json.userid).then(user_info=>{
+        resolve(user_info);
+      });
+     
     });
   });
-  
 };
-
 
 module.exports = user_info_model;
