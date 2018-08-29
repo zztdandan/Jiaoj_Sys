@@ -13,7 +13,7 @@ case_node_model.read_next_node_by_this_progress = function(case_progress_json, n
   let condition = null;
   let tmp = JSON.parse(case_progress_json.content);
   if (typeof tmp.status.condition != 'undefined') {
-    condition = case_progress_json.content.status.condition;
+    condition = tmp.status.condition;
   }
   var this_node_id = case_progress_json.NODE_ID;
   case_node_model.read_next_node_by_this_node_id(this_node_id, condition, next);
@@ -41,6 +41,18 @@ case_node_model.read_next_node_by_this_node_id = function(this_node_id, conditio
         next(node);
       });
     }
+  });
+};
+//promise函数序列
+
+//获得所有该role应做的列表
+case_node_model.read_nodelist_by_role_pro = function(role_str) {
+  //!这里应该加个入口函数的验证，时间紧先不写
+  return new Promise(function(resolve, reject) {
+    let em = new easy_mysql('case_node');
+    em.where('do_role= "' + role_str + '"').select(datalist => {
+      resolve(datalist);
+    });
   });
 };
 

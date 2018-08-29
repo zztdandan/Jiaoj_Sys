@@ -7,7 +7,7 @@ var admin_veri_controller=require(path.join(process.cwd(),'admin_view','controll
 
 
 /* GET users listing. */
-router.get('*',admin_login_controller);
+// router.get('*',admin_login_controller);
 router.use('/',admin_menu_controller);
 router.use('/veri',admin_veri_controller);
 module.exports = router;

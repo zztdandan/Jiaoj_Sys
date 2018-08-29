@@ -14,7 +14,7 @@ var case_progress_model = function() {
   this.NODE_ID = 0;
   this.REC_ID = '';
   //定义全局的progress里面的content的数据格式
-  this.content = JSON.stringify({
+  this.CONTENT = JSON.stringify({
     status: {},
     history: []
   });
@@ -30,12 +30,12 @@ case_progress_model.find_case_progress_by_id = function(REC_ID, next) {
   });
 };
 //新建一条业务数据实体
-case_progress_model.init_new_case = function(node_id, user_info, next) {
+case_progress_model.init_new_case = function(node_info, user_info, next) {
   try {
-    case_index_model.get_case_info_pro(node_id.case_id).then(case_info => {
+    case_index_model.get_case_info_pro(node_info.case_id).then(case_info => {
       let new_progress = new case_progress_model();
-      new_progress.CASE_ID = node_id.case_id;
-      new_progress.NODE_ID = node_id.rec_id;
+      new_progress.CASE_ID = node_info.case_id;
+      new_progress.NODE_ID = node_info.rec_id;
       new_progress.PROGRESS_CREATOR = user_info.REC_ID;
       new_progress.PROGRESS_NAME = user_info.FORIEGN_CNAME + ',' + case_info.CASE_NAME+','+moment().format('YYYY年MM月DD日');
       new_progress.REC_ID = randomword(false, 8);
@@ -70,7 +70,7 @@ case_progress_model.update_case_progress = function(progress_rec_id, progress_no
 //在已有content的基础上制作一个更新的content
 case_progress_model.update_progress_nosave_hasreturn = function(progress, node_id, user_id, new_status) {
   //1、将content字符串格式化
-  var progress_content = JSON.parse(progress.content);
+  var progress_content = JSON.parse(progress.CONTENT);
   //2、将即将变成现在status的json添加时间和user_id属性
   new_status.user_id = user_id;
   new_status.time = moment().format('YYYYMMDDHHmmss');
@@ -122,11 +122,25 @@ case_progress_model.find_progress_list_by_case_node_id = function(case_node_id, 
     next(data);
   });
 };
-
+//promise函数序列
 case_progress_model.find_progress_list_by_user_pro = function(user_id) {
   return new Promise((resolve, reject) => {
     var em = new easy_mysql('case_progress');
     em.where('PROGRESS_CREATOR= "' + user_id + '"').select(function(list) {
+      if (list == null) {
+        reject('查找progress报错');
+      }
+      resolve(list);
+    });
+  });
+};
+
+case_progress_model.find_progress_by_node_list_pro=function(case_node_array){
+  return new Promise((resolve, reject) => {
+    var em = new easy_mysql('case_progress');
+    let array_str=case_node_array.join(',');
+    let where_sql='FIND_IN_SET(NODE_ID,"'+array_str+'")';
+    em.where(where_sql).select(function(list) {
       if (list == null) {
         reject('查找progress报错');
       }

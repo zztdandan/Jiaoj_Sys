@@ -86,9 +86,9 @@ admin_login_user_model.token_decrypto = function (admintoken, next) {
         var admin_user_info_json = JSON.parse(decrypted);
         var that_time = admin_user_info_json.time;
         var this_time = new Date().getTime();
-        if (that_time >= this_time) {
+        if (that_time <= this_time) {
             //! 注意回调函数特性，后面要用else包裹
-            next(new csexception(true, 'failure', {}));
+            next(new csexception(false, 'failure outtime', {}));
         }
         else {
             next(new csexception(true, 'success', {}));

@@ -24,7 +24,6 @@ var user_info_model = require(path.join(process.cwd(), 'menu', 'model', 'user_in
 // 	});
 // });
 
-
 //* get操作集合
 //获得该节点的详细信息，直接获得detail
 router.get('/node_detail', function(req, res, _next) {
@@ -77,20 +76,18 @@ router.get('/case_info', function(req, res, next) {
     });
 });
 
-
 router.get('/case_progress_by_user', function(req, res, next) {
   var user_id = req.query.user_id;
-  case_progress_model.find_progress_list_by_user_pro(user_id).then((list)=>{
-    let a=new Array();
-    list.forEach(a_progress=>{
-    let temp_progress=a_progress;
-    temp_progress.CONTENT=JSON.parse(a_progress.CONTENT); 
-    a.push(temp_progress);
+  case_progress_model.find_progress_list_by_user_pro(user_id).then(list => {
+    let a = new Array();
+    list.forEach(a_progress => {
+      let temp_progress = a_progress;
+      temp_progress.CONTENT = JSON.parse(a_progress.CONTENT);
+      a.push(temp_progress);
     });
     res.json(new csexception(true, 'success', a));
   });
 });
-
 
 //* post操作集合
 //user_form_submit上传controller
@@ -111,23 +108,16 @@ router.post('/user_form_submit', function(req, res, _next) {
       if (typeof node_detail.Return_json == 'undefined') {
         throw new Error('node读取失败或case_node_detail设置不合理');
       }
-      var returnjson_form = node_detail.Return_json.form;
-      // console.log(returnjson_form);
-      //这是同步函数
-      //*请注意，一般我们默认的情况是，returnjson_form这个配置里面肯定要包含case_node_id
-      returnjson_form.forEach(function(element) {
-        if (typeof fields[element.id] != undefined) {
-          element.value = fields[element.id];
-        }
-        //returnjson_form构建完毕，添加一些必要项后压入content.status和history
-      });
+
+      // 创造return_json作为status
+      var returnjson_form = Build_Returnjson_As_Newstatus(node_detail, fields);
 
       //cookie读取用户
       if (typeof req.cookies.token == 'undefined') {
         res.json(new csexception(false, '失去登陆信息', {}));
         return;
       }
-      user_info_model.get_user_by_token_pro(req.cookies.token).then( function(user_info) {
+      user_info_model.get_user_by_token_pro(req.cookies.token).then(function(user_info) {
         //获得用户名
         var user_id = user_info.REC_ID;
         //已经获得return_json，现在根据节点不同属性做不同操作
@@ -141,8 +131,8 @@ router.post('/user_form_submit', function(req, res, _next) {
             //创造新的content真信息
             //content包括：history历史数组，status当前json（只用于给下一步传值）
             var content = case_progress_model.create_new_progress_content(returnjson_form, user_id);
-            //获得该起始节点的下一个节点信息
-            case_node_model.read_next_node_by_this_progress(new_progress, function(next_node) {
+            let next_condition = GetconditionByReturnjson(returnjson_form);
+            case_node_model.read_next_node_by_this_node_id(this_node.rec_id, next_condition, function(next_node) {
               //升级刚刚新建（并已经保存到数据库）的Progress
               case_progress_model.update_case_progress(
                 new_progress.REC_ID,
@@ -172,7 +162,9 @@ router.post('/user_form_submit', function(req, res, _next) {
               throw new Error('这个节点无法前进');
             } else {
               //由于this_node不是终止节点，所以必然有下一个节点
-              case_node_model.read_next_node_by_this_progress(case_progress_old, function(next_node) {
+              // 根据return_json判断是否有condition,condition是何值
+              let next_condition = GetconditionByReturnjson(returnjson_form);
+              case_node_model.read_next_node_by_this_node_id(this_node.rec_id, next_condition, function(next_node) {
                 //获得了下一个节点，获得了returnjson，现在来各种改写现有oldprogress
                 var modified_progress = case_progress_model.update_progress_nosave_hasreturn(
                   case_progress_old,
@@ -182,9 +174,9 @@ router.post('/user_form_submit', function(req, res, _next) {
                 );
                 //请注意next_node改了两次，但是这是合法的冗余操作，不会造成bug
                 case_progress_model.update_case_progress(
-                  modified_progress.rec_id,
-                  modified_progress.node_id,
-                  modified_progress.content,
+                  modified_progress.REC_ID,
+                  modified_progress.NODE_ID,
+                  modified_progress.CONTENT,
                   function(rows) {
                     if (rows == 0) {
                       throw new Error('没有更新数据');
@@ -204,7 +196,6 @@ router.post('/user_form_submit', function(req, res, _next) {
   });
 });
 
-
 //用户登陆信息上传
 router.post('/user_post_form', function(req, res, _next) {
   var form = new formdata.IncomingForm();
@@ -219,21 +210,13 @@ router.post('/user_post_form', function(req, res, _next) {
     // console.log(fields);
     //根据表单的node信息读取node
     case_node_model.read_node_by_id(fields.case_node_id, function(this_node) {
-
       var node_detail = JSON.parse(this_node.node_detail);
       if (typeof node_detail.Return_json == 'undefined') {
         throw new Error('node读取失败或case_node_detail设置不合理');
       }
-      var returnjson_form = node_detail.Return_json.form;
-      // console.log(returnjson_form);
-      //这是同步函数
-      //*请注意，一般我们默认的情况是，returnjson_form这个配置里面肯定要包含case_node_id
-      returnjson_form.forEach(function(element) {
-        if (typeof fields[element.id] != undefined) {
-          element.value = fields[element.id];
-        }
-        //returnjson_form构建完毕，添加一些必要项后压入content.status和history
-      });
+
+      // 创造return_json作为status
+      var returnjson_form = Build_Returnjson_As_Newstatus(node_detail, fields);
 
       //cookie读取用户
       if (typeof req.cookies.token == 'undefined') {
@@ -256,7 +239,9 @@ router.post('/user_post_form', function(req, res, _next) {
             //content包括：history历史数组，status当前json（只用于给下一步传值）
             var content = case_progress_model.create_new_progress_content(returnjson_form, user_id);
             //获得该起始节点的下一个节点信息
-            case_node_model.read_next_node_by_this_progress(new_progress, function(next_node) {
+
+            let next_condition = GetconditionByReturnjson(returnjson_form);
+            case_node_model.read_next_node_by_this_node_id(this_node.rec_id, next_condition, function(next_node) {
               //升级刚刚新建（并已经保存到数据库）的Progress
               case_progress_model.update_case_progress(
                 new_progress.REC_ID,
@@ -285,8 +270,8 @@ router.post('/user_post_form', function(req, res, _next) {
               //如果是终止节点这个进入程序是出错的，因为终结节点不会提供新的数据，
               throw new Error('这个节点无法前进');
             } else {
-              //由于this_node不是终止节点，所以必然有下一个节点
-              case_node_model.read_next_node_by_this_progress(case_progress_old, function(next_node) {
+              let next_condition = GetconditionByReturnjson(returnjson_form);
+              case_node_model.read_next_node_by_this_node_id(this_node.rec_id, next_condition, function(next_node) {
                 //获得了下一个节点，获得了returnjson，现在来各种改写现有oldprogress
                 var modified_progress = case_progress_model.update_progress_nosave_hasreturn(
                   case_progress_old,
@@ -296,16 +281,16 @@ router.post('/user_post_form', function(req, res, _next) {
                 );
                 //请注意next_node改了两次，但是这是合法的冗余操作，不会造成bug
                 case_progress_model.update_case_progress(
-                  modified_progress.rec_id,
-                  modified_progress.node_id,
-                  modified_progress.content,
+                  modified_progress.REC_ID,
+                  modified_progress.NODE_ID,
+                  modified_progress.CONTENT,
                   function(rows) {
                     if (rows == 0) {
                       throw new Error('没有更新数据');
                     }
                     // 更新完成，回传json
                     //这个是个工厂类，回传正确的json
-                    res.json(csexception.new.jsonreturn());
+                    res.json(new csexception(true, 'submit_success', {}));
                   }
                 );
                 // console.log('end');
@@ -318,6 +303,28 @@ router.post('/user_post_form', function(req, res, _next) {
   });
 });
 
-
-
 module.exports = router;
+
+//通过判断returnjson里有无condition键值，赋给condition不同的值
+function GetconditionByReturnjson(returnjson_form) {
+  let next_condition = null;
+  if (typeof returnjson_form.condition != 'undefined') {
+    next_condition = returnjson_form.condition;
+  }
+  return next_condition;
+}
+
+//通过fields的所有表单值，根据nodedetail的标准表单构造new _status
+function Build_Returnjson_As_Newstatus(node_detail, fields) {
+  var returnjson_form = node_detail.Return_json.form;
+  // console.log(returnjson_form);
+  //这是同步函数
+  //*请注意，一般我们默认的情况是，returnjson_form这个配置里面肯定要包含case_node_id
+  returnjson_form.forEach(function(element) {
+    if (typeof fields[element.id] != undefined) {
+      element.value = fields[element.id];
+    }
+    //returnjson_form构建完毕，添加一些必要项后压入content.status和history
+  });
+  return returnjson_form;
+}
