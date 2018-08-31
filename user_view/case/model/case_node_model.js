@@ -26,8 +26,8 @@ case_node_model.read_next_node_by_this_node_id = function(this_node_id, conditio
       //下一个节点不是单节点
       let qry_str = 'start_node= ' + this_node_id;
       var em1 = new easy_mysql('case_map');
-      if (condition == null) {
-        qry_str = 'start_node= ' + this_node_id + ' and condition= ' + condition;
+      if (condition != null) {
+        qry_str = 'start_node= ' + this_node_id + ' and `condition`= "' + condition+'"';
       }
       em1.where(qry_str).find(function(data) {
         var node_id = data.end_node;
@@ -56,4 +56,14 @@ case_node_model.read_nodelist_by_role_pro = function(role_str) {
   });
 };
 
+case_node_model.read_node_by_nodelist_pro=function(node_list){
+  return new Promise(function(resolve,reject){
+    let em = new easy_mysql('case_node');
+    let array_str=node_list.join(',');
+    let where_sql='FIND_IN_SET(rec_id,"'+array_str+'")';
+    em.where(where_sql).select(datalist => {
+      resolve(datalist);
+    });
+  });
+};
 module.exports = case_node_model;

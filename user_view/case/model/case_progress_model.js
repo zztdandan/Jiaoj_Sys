@@ -91,7 +91,7 @@ case_progress_model.update_progress_nosave_hasreturn = function(progress, node_i
 //通过new_status和user_id制作一个新的只有第一条历史记录的content
 case_progress_model.create_new_progress_content = function(new_status, user_id) {
   //定义全局的progress里面的content的数据格式(已经在本函数里定义过)
-  var content = JSON.parse(new case_progress_model().content);
+  var content = JSON.parse(new case_progress_model().CONTENT);
   //在returnjson里面添加两项历史变量
   new_status.user_id = user_id;
   new_status.time = moment().format('YYYYMMDDHHmmss');
@@ -134,7 +134,7 @@ case_progress_model.find_progress_list_by_user_pro = function(user_id) {
     });
   });
 };
-
+//根据node的列表查询所有符合条件的progress
 case_progress_model.find_progress_by_node_list_pro=function(case_node_array){
   return new Promise((resolve, reject) => {
     var em = new easy_mysql('case_progress');
@@ -147,6 +147,20 @@ case_progress_model.find_progress_by_node_list_pro=function(case_node_array){
       resolve(list);
     });
   });
+};
+//获得progress_id，promise版本
+//业务实体按id查询
+case_progress_model.find_case_progress_by_id_pro = function(REC_ID) {
+  return new Promise((resolve, reject) => {
+    var em = new easy_mysql('case_progress');
+    em.where('REC_ID="' + REC_ID + '"').find(function(data) {
+      if (data == null) {
+        throw new Error('查找progress报错');
+      }
+      resolve(data);
+    });
+  });
+ 
 };
 
 module.exports = case_progress_model;

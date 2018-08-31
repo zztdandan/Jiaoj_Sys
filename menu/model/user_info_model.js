@@ -107,5 +107,14 @@ user_info_model.get_user_by_token_pro = function(token) {
     });
   });
 };
-
+user_info_model.get_user_by_id_list = function(id_list) {
+  return new Promise(function(resolve, reject) {
+    let em = new easy_mysql('foriegn_user');
+    let array_str=id_list.join(',');
+    let where_sql='FIND_IN_SET(REC_ID,"'+array_str+'")';
+    em.where(where_sql).select(function(data) {
+      resolve(data);
+    });
+  });
+};
 module.exports = user_info_model;

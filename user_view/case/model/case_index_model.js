@@ -46,4 +46,15 @@ case_index_model.get_case_info_pro = function(case_id) {
     }    
   });
 };
+
+case_index_model.read_case_by_caselist_pro=function(case_list){
+  return new Promise(function(resolve,reject){
+    let em = new easy_mysql('case_index');
+    let array_str=case_list.join(',');
+    let where_sql='FIND_IN_SET(REC_ID,"'+array_str+'")';
+    em.where(where_sql).select(datalist => {
+      resolve(datalist);
+    });
+  });
+};
 module.exports = case_index_model;

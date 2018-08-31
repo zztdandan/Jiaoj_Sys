@@ -308,8 +308,8 @@ module.exports = router;
 //通过判断returnjson里有无condition键值，赋给condition不同的值
 function GetconditionByReturnjson(returnjson_form) {
   let next_condition = null;
-  if (typeof returnjson_form.condition != 'undefined') {
-    next_condition = returnjson_form.condition;
+  if (returnjson_form.where(x=>x.id=='condition').length != 0) {
+    next_condition = returnjson_form.where(x=>x.id=='condition').first().value;
   }
   return next_condition;
 }
